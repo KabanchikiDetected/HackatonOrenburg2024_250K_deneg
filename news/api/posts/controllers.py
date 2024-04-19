@@ -142,7 +142,7 @@ class PostController(APIView):
         description="Метод ставит лайк, если его небыло и убирает, если был",
         responses={
             status.HTTP_201_CREATED: {
-                "example": ["You removed the like", "You have put a like"]
+                "example": "You removed the like | You have put a like"
             }
         },
     )

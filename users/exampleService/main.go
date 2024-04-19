@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/KabanchikiDetected/users/pkg/users"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/pkg/users"
 	"github.com/golang-jwt/jwt/v5"
 )
 

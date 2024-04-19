@@ -15,6 +15,7 @@ type EventSchema struct {
 	StartDate   string `json:"start_date"`
 	EndDate     string `json:"end_date"`
 	IsFinished  bool   `json:"is_finished"`
+	Image       string `json:"image"`
 	Rating      int    `json:"rating"`
 }
 
@@ -35,6 +36,7 @@ func (s *EventSchema) ToDomain() (domain.Event, error) {
 		StartDate:   startDate,
 		EndDate:     endDate,
 		IsFinished:  s.IsFinished,
+		Image:       s.Image,
 		Rating:      float64(s.Rating),
 	}, nil
 }

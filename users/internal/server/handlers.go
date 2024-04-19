@@ -5,9 +5,9 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/KabanchikiDetected/users/internal/domain/requests"
-	"github.com/KabanchikiDetected/users/internal/domain/responses"
-	"github.com/KabanchikiDetected/users/internal/service"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/domain/requests"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/domain/responses"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/service"
 	"github.com/Richtermnd/utilshttp"
 )
 

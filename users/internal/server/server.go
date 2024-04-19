@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/KabanchikiDetected/users/internal/config"
-	"github.com/KabanchikiDetected/users/internal/domain/requests"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/config"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/domain/requests"
 	"github.com/go-pkgz/routegroup"
 )
 

@@ -5,8 +5,8 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/KabanchikiDetected/users/internal/application"
-	"github.com/KabanchikiDetected/users/internal/config"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/application"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/config"
 )
 
 func main() {

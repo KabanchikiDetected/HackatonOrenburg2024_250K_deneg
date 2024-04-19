@@ -10,6 +10,7 @@ type Event struct {
 	StartDate   time.Time `json:"start_date" bson:"start_date"`
 	EndDate     time.Time `json:"end_date" bson:"end_date"`
 	IsFinished  bool      `json:"is_finished" bson:"is_finished"`
+	Image       string    `json:"image" bson:"image"`
 	Rating      float64   `json:"rating" bson:"rating"`
 }
 

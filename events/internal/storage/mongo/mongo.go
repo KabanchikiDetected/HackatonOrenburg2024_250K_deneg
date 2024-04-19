@@ -104,3 +104,29 @@ func (s *Storage) DeleteEvent(ctx context.Context, id string) error {
 	_, err = s.collection.DeleteOne(ctx, bson.M{"_id": objectID})
 	return err
 }
+
+func (s *Storage) InsertImage(ctx context.Context, id string, image string) error {
+	const op = "mongo.InsertImage"
+
+	objectID, err := convertStringToObjectID(id)
+	if err != nil {
+		return err
+	}
+
+	if _, err := s.Event(ctx, id); err != nil {
+		return storage.NotFound
+	}
+
+	_, err = s.collection.UpdateOne(
+		ctx,
+		bson.M{"_id": objectID},
+		bson.D{
+			{
+				Key: "$set", Value: bson.D{
+					{Key: "image", Value: image},
+				},
+			},
+		},
+	)
+	return err
+}

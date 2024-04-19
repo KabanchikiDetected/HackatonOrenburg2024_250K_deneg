@@ -21,6 +21,7 @@ type Storage interface {
 	AddEvent(ctx context.Context, event domain.Event) (string, error)
 	UpdateEvent(ctx context.Context, id string, event domain.Event) error
 	DeleteEvent(ctx context.Context, id string) error
+	InsertImage(ctx context.Context, id string, image string) error
 }
 
 type Service struct {
@@ -103,5 +104,19 @@ func (s *Service) DeleteEvent(ctx context.Context, id string) error {
 		return fmt.Errorf("%w: %s", NotFound, "error deleting event")
 	}
 	log.Info("Deleted event")
+	return nil
+}
+
+func (s *Service) InsertImage(ctx context.Context, id string, image string) error {
+	const op = "service.InsertImage"
+
+	log := s.log.With("operation", op)
+	log.Info("Inserting image")
+	err := s.storage.InsertImage(ctx, id, image)
+	if err != nil {
+		s.log.Error("Error inserting image", err)
+		return fmt.Errorf("%w: %s", NotFound, "error inserting image")
+	}
+	log.Info("Inserted image")
 	return nil
 }

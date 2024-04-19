@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mkdir /tmp/files
+mkdir -p /tmp/files

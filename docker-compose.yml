@@ -1,10 +1,32 @@
 services:
+  # Our code + nginx
   nginx:
+    container_name: nginx
     build:
       context: ./nginx
     ports:
       - "80:80"
       - "443:443"
+    networks:
+      - backbone
+
+  users:
+    container_name: users
+    build:
+      context: ./users
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
+    depends_on:
+      - mongo
+    environment:
+      - ENV_TYPE=dev
+    networks:
+      - backbone
+  
+  
+  # databases
   mongo:
     image: mongo:latest
     restart: always
@@ -14,6 +36,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: passwordXD_1234
     ports:
       - 27017:27017
+  
   postgres:
     image: postgres:latest
     restart: always
@@ -23,3 +46,8 @@ services:
       POSTGRES_DB: users_local
     ports:
       - 5432:5432
+
+
+networks:
+  backbone:
+    driver: bridge

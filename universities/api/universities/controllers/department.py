@@ -6,9 +6,10 @@ from rest_framework.views import APIView
 from rest_framework import status, generics
 from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiParameter, OpenApiResponse, OpenApiExample
 
-from . import docs
-from . import services
-from api import pagination
-from . import serializers
+from .. import docs
+from ..services import DepartmentService
+from .. import serializers
 
 
+class DepartmentController(APIView):
+    ...

@@ -5,5 +5,5 @@ from . import controllers
 
 
 urlpatterns = [
-    path('news', controllers.NewsController.as_view())
+    path('news', controllers.NewsController.as_view()),
 ]

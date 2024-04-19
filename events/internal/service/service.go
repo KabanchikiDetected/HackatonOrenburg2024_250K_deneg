@@ -7,6 +7,7 @@ import (
 	"log/slog"
 
 	"github.com/KabanchikiDetected/hackaton/events/internal/domain"
+	"github.com/KabanchikiDetected/hackaton/events/internal/server/schemas"
 )
 
 var (
@@ -19,7 +20,7 @@ type Storage interface {
 	Event(ctx context.Context, id string) (domain.Event, error)
 	Events(ctx context.Context, isFinished bool) ([]domain.Event, error)
 	AddEvent(ctx context.Context, event domain.Event) (string, error)
-	UpdateEvent(ctx context.Context, event domain.Event) error
+	UpdateEvent(ctx context.Context, id string, event schemas.EventSchema) error
 	DeleteEvent(ctx context.Context, id string) error
 }
 
@@ -78,12 +79,12 @@ func (s *Service) AddEvent(ctx context.Context, event domain.Event) (string, err
 	return id, nil
 }
 
-func (s *Service) UpdateEvent(ctx context.Context, event domain.Event) error {
+func (s *Service) UpdateEvent(ctx context.Context, id string, event schemas.EventSchema) error {
 	const op = "service.UpdateEvent"
 
 	log := s.log.With("operation", op)
 	log.Info("Updating event")
-	err := s.storage.UpdateEvent(ctx, event)
+	err := s.storage.UpdateEvent(ctx, id, event)
 	if err != nil {
 		s.log.Error("Error updating event", err)
 		return fmt.Errorf("%w: %s", NotFound, "error updating event")

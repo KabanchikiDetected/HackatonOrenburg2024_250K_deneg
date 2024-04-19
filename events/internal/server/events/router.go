@@ -14,7 +14,7 @@ type EventService interface {
 	Event(ctx context.Context, id string) (domain.Event, error)
 	Events(ctx context.Context, isFinished bool) ([]domain.Event, error)
 	AddEvent(ctx context.Context, event domain.Event) (string, error)
-	UpdateEvent(ctx context.Context, event domain.Event) error
+	UpdateEvent(ctx context.Context, id string, event schemas.EventSchema) error
 	DeleteEvent(ctx context.Context, id string) error
 }
 
@@ -91,17 +91,27 @@ func (h *EventRouter) addEvent(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *EventRouter) updateEvent(w http.ResponseWriter, r *http.Request) {
-	var event domain.Event
+	var event schemas.EventSchema
+	id := utils.GetIdFromPath(w, r)
 	err := utils.Decode(w, r, &event)
+
 	if err != nil {
 		return
 	}
-	err = h.service.UpdateEvent(r.Context(), event)
+
+	err = h.service.UpdateEvent(r.Context(), id, event)
 	if err != nil {
 		utils.HandleError(err, w)
 		return
 	}
-	err = utils.Encode(w, r, event)
+
+	eventDomain, err := event.ToDomain()
+	if err != nil {
+		utils.SendErrorMessage(w, err.Error())
+		return
+	}
+	eventDomain.ID = id
+	err = utils.Encode(w, r, eventDomain)
 	if err != nil {
 		return
 	}
@@ -115,6 +125,7 @@ func (h *EventRouter) deleteEvent(w http.ResponseWriter, r *http.Request) {
 		utils.HandleError(err, w)
 		return
 	}
+	utils.SendResponceMessage(w, "Event deleted")
 	w.WriteHeader(http.StatusOK)
 }
 

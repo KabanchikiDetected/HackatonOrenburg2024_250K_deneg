@@ -1,3 +1,4 @@
+import json
 from django.core.exceptions import BadRequest
 from rest_framework.request import Request
 from rest_framework import permissions
@@ -26,6 +27,14 @@ from . import serializers
                 description='Id пользователя для получения постов',
                 required=False,
                 type=str
+            ),
+            OpenApiParameter(
+                name='hashtags',
+                location=OpenApiParameter.QUERY,
+                description='Сериализованный список для фильтрации постов',
+                required=False,
+                type=str,
+                examples=[OpenApiExample("some_hashtag", "[\"some_hashtag\"]")]
             )
         ]
     ),
@@ -35,7 +44,7 @@ from . import serializers
         responses={
             status.HTTP_201_CREATED: serializers.PostSerializer
         },
-        request=serializers.PostSerializer
+        request=docs.PostRequestPostSerialzier
     ),
     put=extend_schema(
         summary="Обновить пост",
@@ -75,11 +84,12 @@ class PostController(APIView):
 
     def get(self, request: Request):
         user_id = request.query_params.get("user_id") or request.user_data.get("id")
+        hashtags = json.loads(request.query_params.get("hashtags", "[]"))
         
         if not user_id:
             raise BadRequest("No token or user_id in query params")
         
-        serializer = services.PostService.get_all_by_user_id(user_id)
+        serializer = services.PostService.get_all_by_user_id(user_id, hashtags)
     
         return Response(
             serializer.data,
@@ -107,6 +117,7 @@ class PostController(APIView):
         serializer = services.PostService.update(post_id, user_id, {
             "title": request.data.get("title", ""),
             "content": request.data.get("content", ""),
+            "hashtags": request.data.get("hashtags", []),
             "author_id": user_id
         })
         
@@ -199,7 +210,17 @@ class PostImageController(APIView):
 @extend_schema_view(
     get=extend_schema(
         summary="Лента новостей",
-        description="Ендпоинт просто возвращает все посты от последнего к первому"
+        description="Ендпоинт просто возвращает все посты от последнего к первому",
+        parameters=[
+            OpenApiParameter(
+                name='hashtags',
+                location=OpenApiParameter.QUERY,
+                description='Сериализованный список для фильтрации постов',
+                required=False,
+                type=str,
+                examples=[OpenApiExample("some_hashtag", "[\"some_hashtag\"]")]
+            )
+        ],
     )
 )
 class FeedPostController(generics.ListAPIView):
@@ -207,3 +228,59 @@ class FeedPostController(generics.ListAPIView):
     serializer_class = serializers.PostSerializer
     pagination_class = pagination.StandartPagination
     permission_classes = (permissions.AllowAny, )
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        hashtags = json.loads(self.request.GET.get("hashtags", "[]"))
+        if hashtags:
+            queryset = services.PostService.hashtags_filter(queryset, hashtags)
+
+        return queryset
+
+
+@extend_schema_view(
+    get=extend_schema(
+        summary="Получить комментарии по post_id",
+        description="Ендпоинт просто возвращает все комментарии к посту",
+        responses={
+            status.HTTP_200_OK: serializers.CommentSerializer(many=True)
+        }
+    ),
+    post=extend_schema(
+        summary="Создать комментарий для поста",
+        description="Ендпоинт создает комментарий к посту",
+        responses={
+            status.HTTP_200_OK: serializers.CommentSerializer
+        },
+        request=docs.PostRequestCommentPostSerialzier
+    )
+)
+class CommentsPostController(APIView):
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [permissions.AllowAny()]
+
+        return super().get_permissions()
+    
+    def get(self, request: Request, post_id: int):
+        serializer = services.CommentPostService.get_by_post_id(post_id)
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )
+        
+    def post(self, request: Request, post_id: int):
+        user_id = request.user_data.get("id")
+
+        serializer = services.CommentPostService.create_comment(post_id, {
+            **request.data,
+            "post_id": post_id,
+            "user_id": user_id
+        })
+        
+        return Response(
+            serializer.data,
+            status.HTTP_201_CREATED
+        )

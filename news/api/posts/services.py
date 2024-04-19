@@ -1,3 +1,4 @@
+import json
 from django.core.exceptions import BadRequest
 from rest_framework.serializers import ListSerializer
 
@@ -13,10 +14,13 @@ class PostService:
         return posts
         
     @staticmethod
-    def get_all_by_user_id(user_id: str) -> ListSerializer[serializers.PostSerializer]:
+    def get_all_by_user_id(user_id: str, hashtags: list[str]=[]) -> ListSerializer[serializers.PostSerializer]:
         posts = models.PostModel.objects.filter(
             author_id=user_id
         )
+        
+        if hashtags:
+            posts = PostService.hashtags_filter(posts, hashtags)
 
         serializer = serializers.PostSerializer(
             posts, many=True
@@ -31,7 +35,12 @@ class PostService:
         if not serializer.is_valid():
             raise BadRequest(serializer.error_messages)
         
-        serializer.save()
+        post: models.PostModel = serializer.save()
+        
+        hashtags = post_data.get("hashtags", [])
+        post.set_hashtags(hashtags)
+        
+        serializer = serializers.PostSerializer(post)
         
         return serializer
     
@@ -46,6 +55,11 @@ class PostService:
         
         serializer.save()
         
+        hashtags = new_post_data.get("hashtags", [])
+        post.set_hashtags(hashtags)
+        
+        serializer = serializers.PostSerializer(post)
+
         return serializer
     
     @staticmethod
@@ -97,6 +111,12 @@ class PostService:
             raise BadRequest(f"No post with id {post_id} by user with id {user_id}")
         
         return post
+    
+    @staticmethod
+    def hashtags_filter(queryset, hashtags):
+        hashtag_objects = models.Hashtag.objects.filter(name__in=hashtags)
+
+        return queryset.filter(hashtags__in=hashtag_objects).distinct()
 
 
 class LikePostService:
@@ -163,5 +183,26 @@ class PostImageService:
         
         serializer = serializers.EmptySerializer()
         serializer.data = "Image added"
+        
+        return serializer
+
+
+class CommentPostService:
+    def get_by_post_id(post_id):
+        comments = models.CommentModel.objects.filter(
+            post_id=post_id
+        )
+        
+        serializer = serializers.CommentSerializer(comments, many=True)
+        
+        return serializer
+    
+    def create_comment(post_id, comment_data):
+        serializer = serializers.CommentSerializer(data=comment_data)
+        
+        if not serializer.is_valid():
+            raise BadRequest(serializer.errors)
+        
+        serializer.save()
         
         return serializer

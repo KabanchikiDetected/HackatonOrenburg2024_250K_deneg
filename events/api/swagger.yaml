@@ -28,7 +28,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Event'
+              $ref: '#/components/schemas/EventPost'
       responses:
         '201':
           description: OK
@@ -74,7 +74,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Event'
+                $ref: '#/components/schemas/Message'
+
         '404':
           description: Event not found
 
@@ -99,3 +100,30 @@ components:
           type: boolean
         rating:
           type: number
+    EventPost:
+      type: object
+      properties:
+        faculty_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        start_date:
+          type: string
+        end_date:
+          type: string
+        is_finished:
+          type: boolean
+        rating:
+          type: number
+      required:
+        - title
+        - description
+        - start_date
+        - end_date
+    Message:
+      type: object
+      properties:
+        message:
+          type: string

@@ -5,7 +5,7 @@ import time
 
 class UnixTimestampManager(models.Manager):
     def create(self, **kwargs):
-        kwargs['created_at'] = time.time()
+        kwargs['created_at'] = str(time.time())
         return super().create(**kwargs)
     
 
@@ -28,7 +28,7 @@ class PostModel(models.Model):
         "Кол-во лайков", default=0
     )
     
-    created_at = models.DateTimeField(
+    created_at = models.CharField(
         "Дата создания",
         blank=True, null=True
     )

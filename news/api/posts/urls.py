@@ -8,4 +8,6 @@ urlpatterns = [
     path('', controllers.PostController.as_view()),
     path('<int:post_id>/like/', controllers.LikePostController.as_view()),
     path('<int:post_id>/image/', controllers.PostImageController.as_view()),
+    
+    path("feed/", controllers.FeedPostController.as_view()),
 ]

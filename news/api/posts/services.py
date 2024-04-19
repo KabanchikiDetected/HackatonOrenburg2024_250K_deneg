@@ -7,6 +7,12 @@ from . import serializers
 
 class PostService:
     @staticmethod
+    def _get_all():
+        posts = models.PostModel.objects.all().order_by("-id")
+        
+        return posts
+        
+    @staticmethod
     def get_all_by_user_id(user_id: str) -> ListSerializer[serializers.PostSerializer]:
         posts = models.PostModel.objects.filter(
             author_id=user_id

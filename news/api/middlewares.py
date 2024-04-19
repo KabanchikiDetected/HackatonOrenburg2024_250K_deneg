@@ -38,6 +38,8 @@ class JWTAuthenticationMiddleware:
                 return JsonResponse({'error': 'Invalid token'}, status=401)
             except ValueError as error:
                 return JsonResponse({'error': error}, status=400)
+            
+        request.user = type("user", (), {})
 
         response = self.get_response(request)
         return response
@@ -56,5 +58,3 @@ class PrettyBadRequestMiddleware:
             return JsonResponse({
                 'error':  str(exception)       
             }, status=400)
-
-        return exception

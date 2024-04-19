@@ -14,7 +14,7 @@ type EventService interface {
 	Event(ctx context.Context, id string) (domain.Event, error)
 	Events(ctx context.Context, isFinished bool) ([]domain.Event, error)
 	AddEvent(ctx context.Context, event domain.Event) (string, error)
-	UpdateEvent(ctx context.Context, id string, event schemas.EventSchema) error
+	UpdateEvent(ctx context.Context, id string, event domain.Event) error
 	DeleteEvent(ctx context.Context, id string) error
 }
 
@@ -99,18 +99,19 @@ func (h *EventRouter) updateEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.service.UpdateEvent(r.Context(), id, event)
-	if err != nil {
-		utils.HandleError(err, w)
-		return
-	}
-
 	eventDomain, err := event.ToDomain()
+	eventDomain.ID = id
+
 	if err != nil {
 		utils.SendErrorMessage(w, err.Error())
 		return
 	}
-	eventDomain.ID = id
+
+	err = h.service.UpdateEvent(r.Context(), id, eventDomain)
+	if err != nil {
+		utils.HandleError(err, w)
+		return
+	}
 	err = utils.Encode(w, r, eventDomain)
 	if err != nil {
 		return

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/KabanchikiDetected/hackaton/events/internal/domain"
-	"github.com/KabanchikiDetected/hackaton/events/internal/server/schemas"
 	"github.com/KabanchikiDetected/hackaton/events/internal/storage"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -62,7 +61,7 @@ func (s *Storage) AddEvent(ctx context.Context, event domain.Event) (string, err
 	return result.InsertedID.(primitive.ObjectID).Hex(), err
 }
 
-func (s *Storage) UpdateEvent(ctx context.Context, id string, event schemas.EventSchema) error {
+func (s *Storage) UpdateEvent(ctx context.Context, id string, event domain.Event) error {
 	const op = "mongo.UpdateEvent"
 
 	objectID, err := convertStringToObjectID(id)

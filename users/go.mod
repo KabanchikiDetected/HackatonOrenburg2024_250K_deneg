@@ -1,4 +1,4 @@
-module github.com/KabanchikiDetected/users
+module github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users
 
 go 1.22.1
 

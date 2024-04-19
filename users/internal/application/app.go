@@ -3,9 +3,9 @@ package application
 import (
 	"log/slog"
 
-	"github.com/KabanchikiDetected/users/internal/server"
-	"github.com/KabanchikiDetected/users/internal/service"
-	"github.com/KabanchikiDetected/users/internal/storage/mongo"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/server"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/service"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/storage/mongo"
 )
 
 type App struct {

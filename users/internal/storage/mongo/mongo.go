@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/KabanchikiDetected/users/internal/config"
-	"github.com/KabanchikiDetected/users/internal/domain/models"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/config"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/domain/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

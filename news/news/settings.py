@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     
     'rest_framework',
 
-    'api.news',
+    'api.posts',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'api.middlewares.JWTAuthenticationMiddleware',
+    'api.middlewares.PrettyBadRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'news.urls'
@@ -79,7 +80,9 @@ TEMPLATES = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],
-    'DEFAULT_PERMISSION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'api.permissions.TokenPermission'
+    ]
 }
 
 WSGI_APPLICATION = 'news.wsgi.application'

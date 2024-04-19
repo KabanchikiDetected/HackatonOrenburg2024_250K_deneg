@@ -3,6 +3,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from django.http import JsonResponse
 from django.conf import settings
+from django.core.exceptions import BadRequest
 from pathlib import Path
 
 
@@ -36,7 +37,24 @@ class JWTAuthenticationMiddleware:
             except jwt.InvalidTokenError:
                 return JsonResponse({'error': 'Invalid token'}, status=401)
             except ValueError as error:
-                return JsonResponse({'error': error}, status=401)
+                return JsonResponse({'error': error}, status=400)
 
         response = self.get_response(request)
         return response
+
+
+class PrettyBadRequestMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
+    def process_exception(self, request, exception):
+        if isinstance(exception, BadRequest):
+            return JsonResponse({
+                'error':  str(exception)       
+            }, status=400)
+
+        return exception

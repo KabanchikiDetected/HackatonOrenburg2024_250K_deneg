@@ -3,5 +3,5 @@ from django.urls import path, include
 
 
 urlpatterns = [
-    path('news/', include("api.news.urls"))
+    path('posts/', include("api.posts.urls"))
 ]

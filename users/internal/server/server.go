@@ -7,12 +7,14 @@ import (
 
 	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/config"
 	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/domain/requests"
+	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/pkg/users"
 	"github.com/go-pkgz/routegroup"
 )
 
 type Service interface {
 	Register(ctx context.Context, user requests.Register) error
 	Login(ctx context.Context, user requests.Login) (token string, err error)
+	MakeDeputy(ctx context.Context, id string) (newToken string, err error)
 }
 
 type Server struct {
@@ -52,8 +54,13 @@ func (s *Server) Stop() {
 
 func (s *Server) initServer() {
 	s.mux.Use(MiddlewareCors)
+	s.mux.Use(APIMiddleware)
 	s.mux.HandleFunc("POST /login", s.login)
 	s.mux.HandleFunc("POST /register", s.register)
+
+	jwtMw := users.MiddlwareJWT(config.Config().JWT.PublicKey)
+	s.mux.With(jwtMw).HandleFunc("POST /make_deputy", s.makeDeputy)
+	s.mux.With(jwtMw).HandleFunc("GET /me", s.me)
 }
 
 func (s *Server) Handler() http.Handler {

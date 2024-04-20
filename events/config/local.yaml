@@ -3,7 +3,8 @@ storage:
   uri: mongodb://mongodb:27017
   username: root
   password: passwordXD_1234
+  events_collection: events
+  users_collection: users
   db_name: events_local
-  collection: events
 server:
   port: 8002

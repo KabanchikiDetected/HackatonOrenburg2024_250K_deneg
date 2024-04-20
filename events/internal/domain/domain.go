@@ -15,7 +15,7 @@ type Event struct {
 }
 
 type EventsToStudent struct {
-	Events    []Event `json:"events" bson:"events"`
-	StudentID string  `json:"student_id" bson:"student_id"`
-	Rating    int     `json:"rating" bson:"rating"`
+	Events []Event `json:"events" bson:"events"`
+	UserID string  `json:"user_id" bson:"user_id"`
+	Rating int     `json:"rating" bson:"rating"`
 }

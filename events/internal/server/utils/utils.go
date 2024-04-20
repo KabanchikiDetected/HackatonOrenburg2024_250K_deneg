@@ -1,12 +1,17 @@
 package utils
 
 import (
+	"crypto/rsa"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"os"
+
+	"strings"
 
 	customErrors "github.com/KabanchikiDetected/hackaton/events/internal/errors"
-	"strings"
+	"github.com/golang-jwt/jwt"
 )
 
 func Encode(w http.ResponseWriter, r *http.Request, v interface{}) error {
@@ -60,4 +65,17 @@ func HandleError(err error, w http.ResponseWriter) {
 	if errors.Is(err, customErrors.BadRequest) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
+}
+
+func GetKey() *rsa.PublicKey {
+	data, err := os.ReadFile("./keys/public_key.pem")
+	if err != nil {
+		fmt.Printf("Error reading public key: %v", err)
+	}
+	key, err := jwt.ParseRSAPublicKeyFromPEM(data)
+	if err != nil {
+		fmt.Printf("Error parsing public key: %v", err)
+	}
+
+	return key
 }

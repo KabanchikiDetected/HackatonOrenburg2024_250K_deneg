@@ -1,3 +1,3 @@
-from .department import DepartmentController
-from .group import GroupController
-from .university import UniversityController
+from .department import DepartmentController, DepartmentsController, SearchDepartmentController
+from .group import GroupController, GroupsController, SearchGroupController
+from .university import UniversityController, UniversitiesController, UniversitySearchController, DeputyUniversityController

@@ -5,7 +5,17 @@ from . import controllers
 
 
 urlpatterns = [
-    path("department/", controllers.DepartmentController.as_view()),
-    path("university/", controllers.UniversityController.as_view()),
-    path("group/", controllers.GroupController.as_view()),
+    path("university/", controllers.UniversitiesController.as_view()),
+    path("university/<int:university_id>/", controllers.UniversityController.as_view()),
+    path("university/get-my/", controllers.DeputyUniversityController.as_view()),
+    
+    path("university/<int:university_id>/department/", controllers.DepartmentsController.as_view()),
+    path("university/<int:university_id>/department/<int:department_id>/", controllers.DepartmentController.as_view()),
+
+    path("university/<int:university_id>/department/<int:department_id>/group/", controllers.GroupsController.as_view()),
+    path("university/<int:university_id>/department/<int:department_id>/group/<int:group_id>/", controllers.GroupController.as_view()),
+    
+    path("search/university/", controllers.UniversitySearchController.as_view()),
+    path("search/department/", controllers.SearchDepartmentController.as_view()),
+    path("search/group/", controllers.SearchGroupController.as_view()),
 ]

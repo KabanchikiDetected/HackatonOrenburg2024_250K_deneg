@@ -9,6 +9,8 @@ services:
       - "443:443"
     networks:
       - backbone
+    depends_on:
+      - users
 
   users:
     container_name: users

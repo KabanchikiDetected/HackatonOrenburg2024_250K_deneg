@@ -1,10 +1,10 @@
 env_type: local
 storage:
-  uri: mongodb://87.242.126.184:27017
+  uri: mongodb://mongodb:27017
   username: root
   password: passwordXD_1234
-  db_name: events_dev
   events_collection: events
   users_collection: users
+  db_name: events_local
 server:
-  port: 8000
+  port: 8002

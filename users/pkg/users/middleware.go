@@ -56,8 +56,9 @@ func MiddlwareJWT(publicKey *rsa.PublicKey) func(http.Handler) http.Handler {
 			}
 
 			user := TokenPayload{
-				ID:  claims["id"].(string),
-				Exp: int64(claims["exp"].(float64)),
+				ID:   claims["id"].(string),
+				Role: claims["role"].(string),
+				Exp:  int64(claims["exp"].(float64)),
 			}
 
 			// set context

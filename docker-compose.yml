@@ -1,0 +1,130 @@
+services:
+  # nginx
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - backbone
+    depends_on:
+      - users
+      - news
+      - events
+      - universities
+    volumes:
+      - ./files:/tmp/files/
+
+  # Our code
+  users:
+    container_name: users
+    hostname: users
+    restart: always
+    build:
+      context: ./users
+    ports:
+      - "8000:8000"
+    expose:
+      - 8000
+    depends_on:
+      - mongo
+    environment:
+      - ENV_TYPE=local
+    networks:
+      - backbone
+  
+  events:
+    container_name: events
+    hostname: events
+    restart: always
+    build:
+      context: ./events
+    ports:
+      - "8002:8002"
+    expose:
+      - 8002
+    depends_on:
+      - mongo
+    environment:
+      - ENV_TYPE=local
+    networks:
+      - backbone
+    volumes:
+      - ./files:/app/media/
+  
+  news:
+    container_name: news
+    hostname: news
+    restart: always
+    build:
+      context: ./news
+    ports:
+      - "8001:8001"
+    expose:
+      - 8001
+    depends_on:
+      - postgres
+    env_file:
+      - ./news/.env-local
+    networks:
+      - backbone
+    volumes:
+      - ./files:/app/media/
+    
+  
+  universities:
+    container_name: universities
+    hostname: universities
+    restart: always
+    build:
+      context: ./universities
+    ports:
+      - "8003:8003"
+    expose:
+      - 8003
+    depends_on:
+      - postgres
+    env_file:
+      - ./universities/.env-local
+    networks:
+      - backbone
+    volumes:
+      - ./files:/app/media/
+  
+  
+  # databases
+  mongo:
+    container_name: mongodb
+    hostname: mongodb
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: passwordXD_1234
+      MONGO_INITDB_DATABASE: local
+    ports:
+      - 27017:27017
+    networks:
+      - backbone
+  
+  postgres:
+    container_name: postgres
+    hostname: postgres
+    build:
+      context: ./postgres 
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: passwordXD_1234
+      POSTGRES_DB: local
+    ports:
+      - 5432:5432
+    networks:
+      - backbone
+
+
+networks:
+  backbone:
+    driver: bridge

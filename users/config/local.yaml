@@ -1,14 +1,14 @@
 env_type: "local"
   
 jwt:
-  private_key_path: "./keys/example_private_key.pem"
-  public_key_path: "./keys/example_public_key.pem"
+  private_key_path: "./keys/private_key.pem"
+  public_key_path: "./keys/public_key.pem"
   token_ttl: 24h
 
 storage:
-  url: "mongodb://0.0.0.0:27017"
+  url: "mongodb://mongodb:27017"
   username: "root"
-  password: "password"
+  password: "passwordXD_1234"
   db_name: "local"
 
 server:

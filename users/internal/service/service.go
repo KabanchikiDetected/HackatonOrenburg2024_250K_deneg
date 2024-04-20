@@ -11,6 +11,7 @@ import (
 	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/domain/models"
 	"github.com/KabanchikiDetected/HackatonOrenburg2024_250K_deneg/users/internal/domain/requests"
 	"github.com/golang-jwt/jwt/v5"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -23,6 +24,8 @@ var (
 type Storage interface {
 	SaveUser(ctx context.Context, user models.User) error
 	User(ctx context.Context, id string) (models.User, error)
+	UserByEmail(ctx context.Context, email string) (models.User, error)
+	MakeDeputy(ctx context.Context, id string) error
 }
 
 type Service struct {
@@ -42,7 +45,9 @@ func (s *Service) Register(ctx context.Context, user requests.Register) error {
 	log := s.log.With("operation", op)
 
 	log.Info("register user")
+	log.Debug("user", slog.Any("user", user))
 	if user.Password != user.RepeatPassword {
+		log.Debug("passwords do not match", "password", user.Password, "repeat_password", user.RepeatPassword)
 		return fmt.Errorf("%w: %s", ErrBadRequest, "passwords do not match")
 	}
 
@@ -51,16 +56,20 @@ func (s *Service) Register(ctx context.Context, user requests.Register) error {
 	// Hash password
 	hashedPassword, err := hashPassword(user.Password)
 	if err != nil {
+		log.Debug("failed to hash password", "err", err.Error())
 		return fmt.Errorf("%w: %s", ErrInternalServer, "failed to hash password")
 	}
+	log.Debug("saving user")
 	err = s.storage.SaveUser(ctx, models.User{
 		Role:     models.BaseUser,
 		Email:    user.Email,
 		Password: hashedPassword,
 	})
 	if err != nil {
+		log.Debug("failed to save user", "err", err.Error())
 		return fmt.Errorf("%w: %s", ErrInternalServer, "failed to save user")
 	}
+	log.Debug("user saved")
 	return nil
 }
 
@@ -71,18 +80,38 @@ func (s *Service) Login(ctx context.Context, user requests.Login) (string, error
 	log.Info("login user")
 
 	log.Debug("get user")
-	userDB, err := s.storage.User(ctx, user.Email)
+	userDB, err := s.storage.UserByEmail(ctx, user.Email)
 	if err != nil {
-		log.Error(err.Error())
+		log.Debug(err.Error())
 		return "", fmt.Errorf("%w: %s", ErrNotFound, "user not found")
 	}
 
 	log.Debug("check password")
 	if !checkPasswordHash(user.Password, userDB.Password) {
+		log.Debug("invalid password")
 		return "", fmt.Errorf("%w: %s", ErrBadRequest, "invalid password")
 	}
 	token := createToken(userDB)
 	return token, nil
+}
+
+func (s *Service) MakeDeputy(ctx context.Context, id string) (newToken string, err error) {
+	const op = "service.MakeDeputy"
+	log := s.log.With("operation", op)
+
+	log.Info("make user as deputy")
+
+	err = s.storage.MakeDeputy(ctx, id)
+	if err != nil {
+		return "", fmt.Errorf("%w: %s", ErrNotFound, "failed to make user as deputy")
+	}
+
+	user, err := s.storage.User(ctx, id)
+	if err != nil {
+		return "", fmt.Errorf("%w: %s", ErrNotFound, "failed to get user")
+	}
+	newToken = createToken(user)
+	return newToken, nil
 }
 
 func createToken(user models.User) string {
@@ -109,7 +138,7 @@ func createToken(user models.User) string {
 
 func CreateToken() {
 	token := createToken(models.User{
-		ID:   "1",
+		ID:   primitive.NewObjectID(),
 		Role: models.BaseUser,
 	})
 	fmt.Println(token)

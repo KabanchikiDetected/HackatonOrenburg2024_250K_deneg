@@ -34,6 +34,9 @@ func (s *Storage) UserEvents(ctx context.Context, id string) (domain.EventsToStu
 	}
 	var eventsToStudent domain.EventsToStudent
 	s.usersCollection.FindOne(ctx, bson.M{"user_id": objectID}).Decode(&eventsToStudent)
+	if eventsToStudent.UserID == "" {
+		eventsToStudent.UserID = id
+	}
 	return eventsToStudent, nil
 }
 

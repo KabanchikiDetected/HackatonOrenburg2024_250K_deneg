@@ -47,6 +47,20 @@ func (h *UserRouter) userEvents(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h *UserRouter) userEventsByID(w http.ResponseWriter, r *http.Request) {
+	id := utils.GetIdFromPath(w, r)
+	events, err := h.service.UserEvents(r.Context(), id)
+	if err != nil {
+		utils.HandleError(err, w)
+		return
+	}
+	err = utils.Encode(w, r, events)
+	if err != nil {
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
 func (h *UserRouter) addEventToUser(w http.ResponseWriter, r *http.Request) {
 	payload, err := auth.FromContext(r.Context())
 
@@ -78,5 +92,6 @@ func (h *UserRouter) addEventToUser(w http.ResponseWriter, r *http.Request) {
 func (r *UserRouter) init() {
 	key := utils.GetKey()
 	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("GET /my/events", r.userEvents)
+	r.mux.HandleFunc("GET /{id}/events", r.userEventsByID)
 	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("POST /my/events/{event_id}", r.addEventToUser)
 }

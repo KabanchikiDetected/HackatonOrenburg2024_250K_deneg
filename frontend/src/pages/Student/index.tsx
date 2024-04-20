@@ -1,5 +1,10 @@
 const Student = () => {
-  return <div>Student</div>;
+  return (
+    <main className="students">
+      <h1>Студентам</h1>
+      <p>Страница находится в разработке</p>
+    </main>
+  );
 };
 
 export default Student;

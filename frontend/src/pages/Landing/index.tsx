@@ -1,10 +1,40 @@
-import './index.scss';
+import Rating from "features/components/Rating";
+import "./index.scss";
+import { Link } from "react-router-dom";
+import Footer from "features/components/Footer";
 
 const Landing = () => {
   return (
     <main>
-      <h1>Welcome to the Landing Page</h1>
-      <p>This is the landing page of the website.</p>
+      <div className="top-bar">
+        <div className="top-bar__logo">
+          <img src="/images/landing_img_1.png" alt="" />
+        </div>
+        <div className="top-bar__panel panel">
+          <div className="panel__text">
+            Приветствуем вас в Lifecourse - приложении, которое упрощает процесс
+            обучения и помогает вам достичь успеха. Наше приложение объединяет
+            студентов, преподавателей, работодателей и родителей, обеспечивая
+            удобное пространство для обучения и карьерного роста. Создайте свое
+            впечатляющее резюме, найдите идеальную вакансию и достигните новых
+            высот в обучении. Присоединяйтесь к нам сегодня и откройте для себя
+            новые возможности!
+          </div>
+          <div className="panel__nav">
+            <div className="link">
+              <Link to="/universities">ВУЗам</Link>
+            </div>
+            <div className="link">
+              <Link to="/students">Студентам</Link>
+            </div>
+            <div className="link">
+              <Link to="/enterprises">Предприятиям</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Rating />
+      <Footer />
     </main>
   );
 };

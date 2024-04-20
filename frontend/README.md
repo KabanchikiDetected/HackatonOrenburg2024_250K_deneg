@@ -1,30 +1,23 @@
-# React + TypeScript + Vite
+# DailyChallenge frontend
+[![build](https://github.com/KabanchikiDetected/DailyChallengeFrontend/actions/workflows/build.yml/badge.svg)](https://github.com/KabanchikiDetected/DailyChallengeFrontend/actions/workflows/build.yml)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Stack 
 
-Currently, two official plugins are available:
+`language`: typescript  
+`ui-lib`: react, router-dom, react-spring, react-loader-spinner  
+`libs`: @vkruglikov/react-telegram-web-app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## Docs
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+[docs](docs/index.md)
 
-- Configure the top-level `parserOptions` property like this:
+## Run
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+1. clone this repo
+2. Navigate to the directory `/src/frontend`:  
+`cd src/frontend`
+3. a) for dev:  
+`npm run dev`  
+b) for build:  
+`npm run build`

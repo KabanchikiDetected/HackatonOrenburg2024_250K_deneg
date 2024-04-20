@@ -1,4 +1,4 @@
 const Rating = () => {
-  return <div>Rating</div>;
+  return <main>Rating</main>;
 };
 export default Rating;

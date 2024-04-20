@@ -8,6 +8,7 @@ import (
 	"github.com/KabanchikiDetected/hackaton/events/internal/config"
 	"github.com/KabanchikiDetected/hackaton/events/internal/server/events"
 	"github.com/KabanchikiDetected/hackaton/events/internal/server/middlewares"
+	"github.com/KabanchikiDetected/hackaton/events/internal/server/users"
 	"github.com/go-pkgz/routegroup"
 )
 
@@ -18,6 +19,7 @@ type Server struct {
 
 func New(
 	eventsService events.EventService,
+	usersService users.UsersService,
 ) *Server {
 	cfg := config.Config()
 	httpMx := http.NewServeMux()
@@ -26,6 +28,7 @@ func New(
 	mux.Use(middlewares.SetHeaders)
 
 	events.Register(eventsService, mux.Mount("/events"))
+	users.Register(usersService, mux.Mount("/users"))
 
 	return &Server{
 		server: &http.Server{

@@ -91,6 +91,33 @@ paths:
 
         '404':
           description: Event not found
+  
+  /users/my/events:
+    get:
+      summary: Get events by user
+      description: Get events by user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+  /users/my/events/{id}:
+    post:
+      summary: Add event to user
+      description: Add event to user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: Event not found
 
 components:
   schemas:
@@ -140,3 +167,15 @@ components:
       properties:
         message:
           type: string
+    UserResponse:
+      type: object
+      properties:
+        user_id:
+          type: string
+        rating:
+          type: number
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+    

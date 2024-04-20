@@ -1,0 +1,9 @@
+env_type: local
+storage:
+  uri: mongodb://mongodb:27017
+  username: root
+  password: passwordXD_1234
+  db_name: users_dev
+  collection: users
+server:
+  port: 8005

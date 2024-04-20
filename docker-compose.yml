@@ -12,6 +12,7 @@ services:
     depends_on:
       - users
       - news
+      - events
 
   # Our code
   users:
@@ -24,6 +25,23 @@ services:
       - "8000:8000"
     expose:
       - 8000
+    depends_on:
+      - mongo
+    environment:
+      - ENV_TYPE=local
+    networks:
+      - backbone
+  
+  events:
+    container_name: evets
+    hostname: events
+    restart: always
+    build:
+      context: ./events
+    ports:
+      - "8002:8002"
+    expose:
+      - 8002
     depends_on:
       - mongo
     environment:

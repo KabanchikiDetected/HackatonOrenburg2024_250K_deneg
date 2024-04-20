@@ -1,5 +1,5 @@
 services:
-  # Our code + nginx
+  # nginx
   nginx:
     container_name: nginx
     build:
@@ -12,6 +12,7 @@ services:
     depends_on:
       - users
 
+  # Our code
   users:
     container_name: users
     build:
@@ -27,25 +28,41 @@ services:
     networks:
       - backbone
   
+  news:
+    container_name: news
+    build:
+      context: ./news
+    ports:
+      - "8001:8000"
+    expose:
+      - 8000
+    depends_on:
+      - postgres
+    # env_file:
+    #   - 
+    networks:
+      - backbone
+  
   
   # databases
   mongo:
     image: mongo:latest
     restart: always
     environment:
-      MONGO_INITDB_DATABASE: users_local
+      MONGO_INITDB_DATABASE: local
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: passwordXD_1234
     ports:
       - 27017:27017
   
   postgres:
-    image: postgres:latest
+    build:
+      context: ./postgres 
     restart: always
     environment:
       POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: users_local
+      POSTGRES_PASSWORD: passwordXD_1234
+      POSTGRES_DB: local
     ports:
       - 5432:5432
 

@@ -14,6 +14,8 @@ services:
       - news
       - events
       - universities
+    volumes:
+      - ./files:/tmp/files/
 
   # Our code
   users:
@@ -34,7 +36,7 @@ services:
       - backbone
   
   events:
-    container_name: evets
+    container_name: events
     hostname: events
     restart: always
     build:
@@ -49,6 +51,8 @@ services:
       - ENV_TYPE=local
     networks:
       - backbone
+    volumes:
+      - ./files:/app/media/
   
   news:
     container_name: news
@@ -66,6 +70,9 @@ services:
       - ./news/.env-local
     networks:
       - backbone
+    volumes:
+      - ./files:/app/media/
+    
   
   universities:
     container_name: universities
@@ -83,6 +90,8 @@ services:
       - ./universities/.env-local
     networks:
       - backbone
+    volumes:
+      - ./files:/app/media/
   
   
   # databases

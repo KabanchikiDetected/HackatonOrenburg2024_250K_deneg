@@ -26,7 +26,7 @@ const StudentReg = () => {
         <div className="avatar">
           <img src={data.photoPreview} alt="" />
           <input
-            value={''}
+            value={""}
             onChange={(e) => changeFile(e)}
             style={{ display: "none" }}
             ref={ref}
@@ -36,39 +36,51 @@ const StudentReg = () => {
         </div>
 
         <div className="info">
+          <label htmlFor="name">
+            <p>Имя и фамилия</p>
+          </label>
           <input
+            id="name"
             value={data.name}
             onChange={(e) => setData({ ...data, name: e.target.value })}
             type="text"
-            placeholder="Имя"
           />
+          <label htmlFor="university">
+            <p>Университет</p>
+          </label>
           <input
+            id="university"
             value={data.university}
             onChange={(e) => setData({ ...data, university: e.target.value })}
             type="text"
-            placeholder="Университет"
           />
+          <label htmlFor="faculty">
+            <p>Факультет</p>
+          </label>
           <input
+            id="faculty"
             value={data.faculty}
             onChange={(e) => setData({ ...data, faculty: e.target.value })}
             type="text"
-            placeholder="Факультет"
           />
+          <label htmlFor="department">
+            <p>Кафедра</p>
+          </label>
           <input
+            id="department"
             value={data.department}
             onChange={(e) => setData({ ...data, department: e.target.value })}
             type="text"
-            placeholder="Кафедра"
           />
         </div>
       </div>
       <textarea
-        value={data.about}
+        value={data.about}d
         onChange={(e) => setData({ ...data, about: e.target.value })}
         placeholder="О себе"
       />
       <br />
-      <button>Зарегистрироваться</button>
+      <button onClick={regStudent}>Зарегистрироваться</button>
     </main>
   );
 };

@@ -16,7 +16,7 @@ const UniversityReg = () => {
     setData({ ...data, photoPreview: URL.createObjectURL(e.target.files[0]) });
   }
 
-  function regStudent() {
+  function regUniversity() {
     console.log(data);
   }
 
@@ -59,10 +59,10 @@ const UniversityReg = () => {
       <textarea
         value={data.about}
         onChange={(e) => setData({ ...data, about: e.target.value })}
-        placeholder="О себе"
+        placeholder="О ВУЗе"
       />
       <br />
-      <button>Зарегистрироваться</button>
+      <button onClick={regUniversity}>Зарегистрироваться</button>
     </main>
   );
 };

@@ -12,6 +12,7 @@ services:
     depends_on:
       - users
       - news
+      - events
 
   # Our code
   users:
@@ -27,7 +28,24 @@ services:
     depends_on:
       - mongo
     environment:
-      - ENV_TYPE=dev
+      - ENV_TYPE=local
+    networks:
+      - backbone
+  
+  events:
+    container_name: evets
+    hostname: events
+    restart: always
+    build:
+      context: ./events
+    ports:
+      - "8002:8002"
+    expose:
+      - 8002
+    depends_on:
+      - mongo
+    environment:
+      - ENV_TYPE=local
     networks:
       - backbone
   
@@ -47,6 +65,23 @@ services:
       - ./news/.env-local
     networks:
       - backbone
+  
+  # universities:
+  #   container_name: news
+  #   hostname: news
+  #   restart: always
+  #   build:
+  #     context: ./news
+  #   ports:
+  #     - "8001:8001"
+  #   expose:
+  #     - 8001
+  #   depends_on:
+  #     - postgres
+  #   env_file:
+  #     - ./news/.env-local
+  #   networks:
+  #     - backbone
   
   
   # databases

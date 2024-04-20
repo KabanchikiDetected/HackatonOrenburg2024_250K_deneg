@@ -1,0 +1,167 @@
+openapi: 3.0.0
+info:
+  title: Users API
+  version: 1.0.0
+  description: Users API
+  termsOfService: http://swagger.io/terms/
+  contact:
+    name: KabanchikiDetected
+    url: https://github.com/KabanchikiDetected
+
+paths:
+  /users:
+    get:
+      summary: Returns all users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPost'
+      responses:
+        '201':
+          description: User created
+  /users/me:
+    get:
+      summary: Returns current user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer <token>
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      summary: Update current user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer <token>
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+  /users/me/image:
+    post:
+      summary: Upload image
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer <token>
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Image uploaded
+
+  /users/{id}:
+    get:
+      summary: Returns user by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    delete:
+      summary: Delete user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer <token>
+      responses:
+        '200':
+          description: User deleted
+  
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        birthday:
+          type: string
+          format: date
+          example: '2006.02.01'
+        description:
+          type: string
+        faculty_id:
+          type: string
+        
+      required:
+        - id
+        - name
+    UserPost:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        birthday:
+          type: string
+          format: date
+          example: '2006.02.01'
+        description:
+          type: string
+        faculty_id:
+          type: string

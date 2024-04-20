@@ -1,11 +1,14 @@
 @import "./styles/index.scss";
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 .container {
   width: 100%;
   min-height: 100dvh;
 }
 
 body {
+  height: 100vh;
   background-color: #F0F0F0;
   font-family: 'Monserrat', sans-serif;
 }

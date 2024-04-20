@@ -1,25 +1,54 @@
 import { useState } from "react";
 import "./index.scss";
+import { useNavigate } from "react-router-dom";
 
 interface IData {
   email: string | "";
   password: string | "";
-  repeatPassword: string | "";
+  repeat_password: string | "";
 }
 
 const Login = () => {
   const [register, setRegister] = useState<boolean>(false);
+  const navigate = useNavigate();
   const [data, setData] = useState<IData>({
     email: "",
     password: "",
-    repeatPassword: "",
+    repeat_password: "",
   });
-  function handleLoginClick() {
-    console.log("login");
+  async function handleLoginClick() {
+    if (data.email && data.password) {
+      let response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      });
+      response = await response.json();
+      if (response.token) {
+        localStorage.setItem("token", response.token);
+        navigate('/lk/profile')
+      } else {
+        alert("Неверные данные");
+      }
+    }
   }
 
-  function handleRegisterClick() {
-    console.log("register");
+  async function handleRegisterClick() {
+    if (data.email && data.password && data.repeat_password) {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      console.log(response);
+    }
   }
 
   return (
@@ -52,9 +81,9 @@ const Login = () => {
               Введите пароль
             </label>
             <input
-              value={data.repeatPassword}
+              value={data.repeat_password}
               onChange={(e) =>
-                setData({ ...data, repeatPassword: e.target.value })
+                setData({ ...data, repeat_password: e.target.value })
               }
               id="repeat-password"
               type="password"

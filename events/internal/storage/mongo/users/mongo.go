@@ -33,9 +33,9 @@ func (s *Storage) UserEvents(ctx context.Context, id string) (domain.EventsToStu
 		return domain.EventsToStudent{}, err
 	}
 	var eventsToStudent domain.EventsToStudent
-	s.usersCollection.FindOne(ctx, bson.M{"user_id": objectID}).Decode(&eventsToStudent)
-	if eventsToStudent.UserID == "" {
-		eventsToStudent.UserID = id
+	err = s.usersCollection.FindOne(ctx, bson.M{"user_id": objectID}).Decode(&eventsToStudent)
+	if err != nil {
+		return domain.EventsToStudent{}, err
 	}
 	return eventsToStudent, nil
 }
@@ -57,7 +57,7 @@ func (s *Storage) AddEventToUser(ctx context.Context, studentID string, eventID 
 
 	_, err = s.usersCollection.UpdateOne(
 		ctx,
-		bson.M{"student_id": objectID},
+		bson.M{"user_id": objectID},
 		bson.D{
 			{
 				Key: "$push", Value: bson.D{

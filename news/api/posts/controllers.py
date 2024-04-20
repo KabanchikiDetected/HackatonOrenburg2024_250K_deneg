@@ -249,6 +249,7 @@ class FeedPostController(generics.ListAPIView):
             cache_key = f'hashtags:{raw_hashtags};users:{raw_users}'
             
             queryset = cache.get(cache_key)
+            
             if queryset:
                 return queryset
         except ConnectionError as e:

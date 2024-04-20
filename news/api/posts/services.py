@@ -120,9 +120,7 @@ class PostService:
     
     @staticmethod
     def users_filter(queryset, users: list[int]):
-        hashtag_objects = models.Hashtag.objects.filter(user_id__in=users)
-
-        return queryset.filter(hashtags__in=hashtag_objects).distinct()
+        return queryset.filter(author_id__in=users).distinct()
 
 
 class LikePostService:

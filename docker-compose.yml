@@ -15,6 +15,7 @@ services:
       - events
       - universities
       - search_and_filter
+      - students
     volumes:
       - ./files:/tmp/files/
       - ./frontend/dist:/root/mc/
@@ -109,6 +110,25 @@ services:
       - ./search_and_filter/.env-local
     networks:
       - backbone
+  
+  students:
+    container_name: students
+    hostname: students
+    restart: always
+    build:
+      context: ./students
+    ports:
+      - "8005:8005"
+    expose:
+      - 8005
+    depends_on:
+      - mongo
+    environment:
+      - ENV_TYPE=local
+    networks:
+      - backbone
+    volumes:
+      - ./files:/app/media/
   
   # databases
   mongo:

@@ -121,6 +121,16 @@ class PostService:
     @staticmethod
     def users_filter(queryset, users: list[int]):
         return queryset.filter(author_id__in=users).distinct()
+    
+    @staticmethod
+    def search(search: str):
+        postes = models.PostModel.objects.filter(
+            title__icontains=search
+        )
+        
+        serializer = serializers.PostSerializer(postes, many=True)
+        
+        return serializer
 
 
 class LikePostService:

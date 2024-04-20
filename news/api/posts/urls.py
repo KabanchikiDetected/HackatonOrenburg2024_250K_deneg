@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:post_id>/comments/', controllers.CommentsPostController.as_view()),
     
     path("feed/", controllers.FeedPostController.as_view()),
+    path("search/", controllers.SearchPostController.as_view()),
 ]

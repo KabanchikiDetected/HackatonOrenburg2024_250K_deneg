@@ -124,7 +124,7 @@ paths:
             type: string
             example: Bearer <token>
       responses:
-        '204':
+        '200':
           description: User deleted
   
 components:

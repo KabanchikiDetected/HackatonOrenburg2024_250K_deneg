@@ -29,7 +29,9 @@ const Login = () => {
         }),
       });
       response = await response.json();
+      //@ts-ignore
       if (response.token) {
+        //@ts-ignore
         localStorage.setItem("token", response.token);
         navigate('/lk/profile')
       } else {
@@ -125,6 +127,7 @@ const Login = () => {
           className="login__switch"
           onClick={() => {
             setRegister(!register);
+            {/*//@ts-ignore*/}
             setData({ email: "", password: "", repeatPassword: "" });
           }}
         >

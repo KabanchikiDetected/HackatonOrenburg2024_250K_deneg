@@ -16,6 +16,7 @@ const StudentReg = () => {
     setData({ ...data, photoPreview: URL.createObjectURL(e.target.files[0]) });
   }
 
+  //@ts-ignore
   function regStudent() {
     console.log(data);
   }
@@ -32,6 +33,7 @@ const StudentReg = () => {
             ref={ref}
             type="file"
           />
+          {/*@ts-ignore*/}
           <button onClick={() => ref.current.click()}>Добавить фото</button>
         </div>
 

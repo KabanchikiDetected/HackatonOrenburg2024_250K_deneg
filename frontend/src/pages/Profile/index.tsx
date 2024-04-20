@@ -14,6 +14,7 @@ const Profile = () => {
 
   useLayoutEffect(() => {
     async function request() {
+      //@ts-ignore
       let role = jwtDecode(token).role;
 
       if (role === "user") {

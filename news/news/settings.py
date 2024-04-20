@@ -29,7 +29,9 @@ SECRET_KEY = 'django-insecure-is=ia-dnosc=semk0@i&k72sd=v3kg1qd6kyg1wv7=u*bj4v!9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.getenv('DEBUG', 'false').lower() == 'true' else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "*"
+]
 
 
 # Application definition
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     # 'django.contrib.messages',
     # 'django.contrib.staticfiles',
     
+    "corsheaders",
     'rest_framework',
     'drf_spectacular',
 
@@ -160,3 +163,35 @@ MEDIA_ROOT = BASE_DIR /'media'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CSRF_TRUSTED_ORIGINS = [
+    os.getenv("URL", "*")
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'filename',
+    "Content-Disposition",
+    'name',
+    "boundary",
+    "Set-Cookie",
+]

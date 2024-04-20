@@ -91,6 +91,20 @@ paths:
 
         '404':
           description: Event not found
+  
+  /users/{id}/events:
+    get:
+      summary: Get events by user
+      description: Get events by user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
 
 components:
   schemas:
@@ -140,3 +154,4 @@ components:
       properties:
         message:
           type: string
+    

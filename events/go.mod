@@ -13,6 +13,8 @@ require (
 
 require (
 	github.com/go-pkgz/routegroup v1.1.1
+	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/klauspost/compress v1.13.6 // indirect

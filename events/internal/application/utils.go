@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func connectToMongoDB() *mongo.Collection {
+func connectToMongoDB() (*mongo.Collection, *mongo.Collection) {
 	cfg := config.Config().Storage
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*20)
 	defer cancel()
@@ -19,8 +19,9 @@ func connectToMongoDB() *mongo.Collection {
 		panic(err)
 	}
 	db := client.Database(cfg.DBName)
-	collection := db.Collection(cfg.Collection)
-	return collection
+	eventsCollection := db.Collection(cfg.EventsCollection)
+	usersCollection := db.Collection(cfg.UsersCollection)
+	return eventsCollection, usersCollection
 }
 
 func createOptions() *options.ClientOptions {

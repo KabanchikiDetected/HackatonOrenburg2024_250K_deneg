@@ -4,6 +4,7 @@ storage:
   username: root
   password: passwordXD_1234
   db_name: events_dev
-  collection: events
+  events_collection: events
+  users_collection: users
 server:
   port: 8000

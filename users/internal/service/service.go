@@ -42,7 +42,9 @@ func (s *Service) Register(ctx context.Context, user requests.Register) error {
 	log := s.log.With("operation", op)
 
 	log.Info("register user")
+	log.Debug("user", slog.Any("user", user))
 	if user.Password != user.RepeatPassword {
+		log.Debug("passwords do not match", "password", user.Password, "repeat_password", user.RepeatPassword)
 		return fmt.Errorf("%w: %s", ErrBadRequest, "passwords do not match")
 	}
 
@@ -51,6 +53,7 @@ func (s *Service) Register(ctx context.Context, user requests.Register) error {
 	// Hash password
 	hashedPassword, err := hashPassword(user.Password)
 	if err != nil {
+		log.Debug("failed to hash password", "err", err.Error())
 		return fmt.Errorf("%w: %s", ErrInternalServer, "failed to hash password")
 	}
 	err = s.storage.SaveUser(ctx, models.User{
@@ -59,6 +62,7 @@ func (s *Service) Register(ctx context.Context, user requests.Register) error {
 		Password: hashedPassword,
 	})
 	if err != nil {
+		log.Debug("failed to save user", "err", err.Error())
 		return fmt.Errorf("%w: %s", ErrInternalServer, "failed to save user")
 	}
 	return nil
@@ -73,12 +77,13 @@ func (s *Service) Login(ctx context.Context, user requests.Login) (string, error
 	log.Debug("get user")
 	userDB, err := s.storage.User(ctx, user.Email)
 	if err != nil {
-		log.Error(err.Error())
+		log.Debug(err.Error())
 		return "", fmt.Errorf("%w: %s", ErrNotFound, "user not found")
 	}
 
 	log.Debug("check password")
 	if !checkPasswordHash(user.Password, userDB.Password) {
+		log.Debug("invalid password")
 		return "", fmt.Errorf("%w: %s", ErrBadRequest, "invalid password")
 	}
 	token := createToken(userDB)

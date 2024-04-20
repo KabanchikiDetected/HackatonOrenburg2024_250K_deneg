@@ -7,7 +7,7 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, OpenApiPara
 
 from .. import docs
 from api.permissions import IsDeputyPermission, TokenPermission
-from ..services import UniversityService
+from ..services import UniversityService, get_full_university_by_user_id
 from .. import serializers
 
 
@@ -122,4 +122,16 @@ class UniversityAddImageController(APIView):
         return Response(
             serializer.data,
             status.HTTP_201_CREATED
+        )
+
+
+class MyEducationController(APIView):
+    def get(self, request: Request):
+        user_id = request.user_data.get("id")
+        
+        serializer = get_full_university_by_user_id(user_id)
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
         )

@@ -1,4 +1,9 @@
+import random
 from django.db import models
+
+
+def get_random_number():
+    return random.randint(10000, 99999)
 
 
 class UniversityModel(models.Model):
@@ -11,6 +16,14 @@ class UniversityModel(models.Model):
     website_url = models.CharField(max_length=256)
 
     deputy_id = models.CharField(max_length=128, unique=True)
+    
+    @property
+    def images(self):
+        images = UniversityImageModel.objects.filter(
+            university_id=self.pk
+        )
+
+        return images
     
     class Meta:
         db_table = "university"
@@ -57,9 +70,27 @@ class GroupModel(models.Model):
 
 
 class UserToGroupModel(models.Model):
-    user_id = models.CharField(max_length=128)
+    user_id = models.CharField(max_length=128, unique=True)
     group_id = models.IntegerField()
     is_confirmed = models.BooleanField(default=False)
     
     class Meta:
         db_table = "user_to_group"
+        
+    
+def university_image_upload_path(instance, filename):
+    return f'post_image/{instance.university_id}/{get_random_number()}_{filename}'
+        
+
+class UniversityImageModel(models.Model):
+    university_id = models.IntegerField(
+        "Id университета"
+    )
+    image = models.ImageField(
+        "Изображение",
+        upload_to=university_image_upload_path,
+        max_length=512,
+    )
+    
+    class Meta:
+        db_table = "university_image"

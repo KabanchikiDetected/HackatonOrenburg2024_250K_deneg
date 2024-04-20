@@ -54,6 +54,22 @@ class UniversityService:
         return serializer
     
     @staticmethod
+    def add_image(university_id: int, image_data: dict):
+        university = UniversityService._get_by_id(university_id)
+        
+        serializer = serializers.UniversityImageSerialzier(data=image_data)
+
+        if not serializer.is_valid():
+            raise BadRequest(serializer.errors)
+        
+        serializer.save()
+        
+        serializer = serializers.EmptySerializer()
+        serializer.data = "Image added"
+        
+        return serializer
+    
+    @staticmethod
     def get_one_by_id(university_id: int):
         university = UniversityService._get_by_id(university_id)
         

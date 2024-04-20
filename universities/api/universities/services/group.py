@@ -111,3 +111,121 @@ class GroupService:
             raise BadRequest(f"Not found group with id {group}")
         
         return group
+    
+    @staticmethod
+    def create_requests(university_id: int, department_id: int, group_id: int, user_id: int, request_data: dict):
+        group = GroupService._get_protected(university_id, department_id, group_id)
+        
+        
+        serializer = serializers.UserToGroupSerializer(data={
+            "user_id": user_id,
+            "group_id": group.id,
+            "is_confirmed": False
+        })
+        
+        if not serializer.is_valid():
+            raise BadRequest(serializer.errors)
+
+        serializer.save()
+
+        return serializer
+    
+    @staticmethod
+    def get_requests(university_id: int, department_id: int, group_id: int):
+        users_to_group = GroupService._get_requests(university_id, department_id, group_id)
+        
+        serializer = serializers.UserToGroupSerializer(users_to_group, many=True)
+
+        return serializer
+
+    @staticmethod
+    def _get_requests(university_id: int, department_id: int, group_id: int):
+        group = GroupService._get_protected(university_id, department_id, group_id)
+        
+        users_to_group = models.UserToGroupModel.objects.filter(
+            group_id=group.pk,
+            is_confirmed=False
+        )
+        
+        return users_to_group
+    
+    @staticmethod
+    def accept_requests(university_id: int, department_id: int, group_id: int, request_id: int):
+        group = GroupService._get_protected(university_id, department_id, group_id)
+        
+        users_to_group = GroupService._get_request(request_id)
+        users_to_group.is_confirmed = True
+        users_to_group.save()
+        
+        group.students_count += 1
+        group.save()
+        
+        serializer = serializers.EmptySerializer()
+        serializer.data = "Request accepted"
+
+        return serializer
+    
+    @staticmethod
+    def deny_requests(university_id: int, department_id: int, group_id: int, request_id: int):
+        group = GroupService._get_protected(university_id, department_id, group_id)
+        
+        users_to_group = GroupService._get_request(request_id)
+        users_to_group.delete()
+        
+        serializer = serializers.EmptySerializer()
+        serializer.data = "Request deny"
+
+        return serializer
+    
+    @staticmethod
+    def _get_request(request_id: int):
+        try:
+            request = models.UserToGroupModel.objects.get(
+                pk=request_id
+            )
+        except models.UserToGroupModel.DoesNotExist:
+            raise BadRequest(f"No reqeust with id {request_id}")
+
+        return request
+    
+    @staticmethod
+    def get_request_by_user_id(user_id: str):
+        group_to_user = GroupService._get_request_by_user_id(user_id)
+        
+        serializer = serializers.UserToGroupSerializer(group_to_user)
+        
+        return serializer
+    
+    @staticmethod
+    def _get_request_by_user_id(user_id: str):
+        try:
+            request = models.UserToGroupModel.objects.get(
+                user_id=user_id
+            )
+        except models.UserToGroupModel.DoesNotExist:
+            raise BadRequest(f"You havent requests to group")
+
+        return request
+    
+    @staticmethod
+    def get_by_user_id(user_id: str):
+        group = GroupService._get_by_user_id(user_id)
+        
+        serializer = serializers.GroupSerializer(group)
+        
+        return serializer
+        
+    @staticmethod
+    def _get_by_user_id(user_id: str):
+        group_to_user = GroupService._get_request_by_user_id(user_id)
+        
+        if not group_to_user.is_confirmed:
+            serializer = serializers.EmptySerializer()
+            serializer.data = "You dont have group"
+            
+            return serializer
+        
+        
+        group = GroupService._get_by_id(group_to_user.group_id)
+        
+        return group

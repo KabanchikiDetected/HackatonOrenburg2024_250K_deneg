@@ -108,3 +108,18 @@ class DeputyUniversityController(APIView):
             serializer.data,
             status.HTTP_200_OK
         )
+
+
+class UniversityAddImageController(APIView):
+    permission_classes = [TokenPermission, IsDeputyPermission]
+    
+    def post(self, request: Request, university_id: int):
+        serializer = UniversityService.add_image(university_id, {
+            "image": request.FILES.get("image"),
+            "university_id": university_id,
+        })
+        
+        return Response(
+            serializer.data,
+            status.HTTP_201_CREATED
+        )

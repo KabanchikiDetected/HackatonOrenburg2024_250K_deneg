@@ -102,7 +102,85 @@ class SearchGroupController(APIView):
 
 
 class GroupRequestsController(APIView):
-    permission_classes = [AllowAny]
+    def get_permissions(self):
+        if self.request.method in ["GET"]:
+            return [TokenPermission()]
+        
+        if self.request.method in ["POST"]:
+            return [TokenPermission()]
     
     def get(self, request: Request, university_id: int, department_id: int, group_id: int):
-        ...
+        serializer = GroupService.get_requests(university_id, department_id, group_id)
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )
+        
+    def post(self, request: Request, university_id: int, department_id: int, group_id: int):
+        user_id = request.user_data.get("id")
+        
+        serializer = GroupService.create_requests(university_id, department_id, group_id, user_id, {
+            **request.data,
+            "university_id": university_id,
+            "department_id": department_id,
+            "group_id": group_id,
+            "user_id":group_id
+        })
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )
+        
+
+class GroupRequestAcceptController(APIView):
+    permission_classes = [TokenPermission, IsDeputyPermission]
+    
+    def get(self, request: Request, university_id: int, department_id: int, group_id: int, request_id: int):
+        serializer = GroupService.accept_requests(university_id, department_id, group_id, request_id)
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )
+
+
+class GroupRequestDenyController(APIView):
+    permission_classes = [TokenPermission, IsDeputyPermission]
+    
+    def get(self, request: Request, university_id: int, department_id: int, group_id: int, request_id: int):
+        serializer = GroupService.deny_requests(university_id, department_id, group_id, request_id)
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )
+
+
+class MyRequestController(APIView):
+    permission_classes = [TokenPermission]
+    
+    def get(self, request: Request):
+        user_id = request.user_data.get("id")
+        
+        serializer = GroupService.get_request_by_user_id(user_id)
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )
+
+
+class MyGroupController(APIView):
+    permission_classes = [TokenPermission]
+    
+    def get(self, request: Request):
+        user_id = request.user_data.get("id")
+
+        serializer = GroupService.get_by_user_id(user_id)
+
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )

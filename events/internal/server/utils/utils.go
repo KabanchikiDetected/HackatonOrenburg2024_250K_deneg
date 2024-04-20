@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/KabanchikiDetected/hackaton/events/internal/service"
+	customErrors "github.com/KabanchikiDetected/hackaton/events/internal/errors"
 	"strings"
 )
 
@@ -49,15 +49,15 @@ func SendErrorMessage(w http.ResponseWriter, message string) {
 }
 
 func HandleError(err error, w http.ResponseWriter) {
-	if errors.Is(err, service.InternalServerError) {
+	if errors.Is(err, customErrors.InternalServerError) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 
-	if errors.Is(err, service.NotFound) {
+	if errors.Is(err, customErrors.NotFound) {
 		http.Error(w, err.Error(), http.StatusNotFound)
 	}
 
-	if errors.Is(err, service.BadRequest) {
+	if errors.Is(err, customErrors.BadRequest) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 }

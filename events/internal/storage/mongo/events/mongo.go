@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"github.com/KabanchikiDetected/hackaton/events/internal/domain"
-	"github.com/KabanchikiDetected/hackaton/events/internal/storage"
+	"github.com/KabanchikiDetected/hackaton/events/internal/errors"
+	mongoStorage "github.com/KabanchikiDetected/hackaton/events/internal/storage/mongo"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -23,7 +25,7 @@ func New(collection *mongo.Collection) *Storage {
 func (s *Storage) Event(ctx context.Context, id string) (domain.Event, error) {
 	const op = "mongo.Event"
 
-	objectID, err := convertStringToObjectID(id)
+	objectID, err := mongoStorage.ConvertStringToObjectID(id)
 	if err != nil {
 		return domain.Event{}, err
 	}
@@ -64,14 +66,14 @@ func (s *Storage) AddEvent(ctx context.Context, event domain.Event) (string, err
 func (s *Storage) UpdateEvent(ctx context.Context, id string, event domain.Event) error {
 	const op = "mongo.UpdateEvent"
 
-	objectID, err := convertStringToObjectID(id)
+	objectID, err := mongoStorage.ConvertStringToObjectID(id)
 
 	if err != nil {
 		return err
 	}
 
 	if _, err := s.Event(ctx, id); err != nil {
-		return storage.NotFound
+		return errors.NotFound
 	}
 
 	_, err = s.collection.UpdateOne(
@@ -97,7 +99,7 @@ func (s *Storage) UpdateEvent(ctx context.Context, id string, event domain.Event
 func (s *Storage) DeleteEvent(ctx context.Context, id string) error {
 	const op = "mongo.DeleteEvent"
 
-	objectID, err := convertStringToObjectID(id)
+	objectID, err := mongoStorage.ConvertStringToObjectID(id)
 	if err != nil {
 		return err
 	}
@@ -108,13 +110,13 @@ func (s *Storage) DeleteEvent(ctx context.Context, id string) error {
 func (s *Storage) InsertImage(ctx context.Context, id string, image string) error {
 	const op = "mongo.InsertImage"
 
-	objectID, err := convertStringToObjectID(id)
+	objectID, err := mongoStorage.ConvertStringToObjectID(id)
 	if err != nil {
 		return err
 	}
 
 	if _, err := s.Event(ctx, id); err != nil {
-		return storage.NotFound
+		return errors.NotFound
 	}
 
 	_, err = s.collection.UpdateOne(

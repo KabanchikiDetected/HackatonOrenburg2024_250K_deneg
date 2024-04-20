@@ -11,10 +11,11 @@ type Event struct {
 	EndDate     time.Time `json:"end_date" bson:"end_date"`
 	IsFinished  bool      `json:"is_finished" bson:"is_finished"`
 	Image       string    `json:"image" bson:"image"`
-	Rating      float64   `json:"rating" bson:"rating"`
+	Rating      int       `json:"rating" bson:"rating"`
 }
 
 type EventsToStudent struct {
 	Events    []Event `json:"events" bson:"events"`
 	StudentID string  `json:"student_id" bson:"student_id"`
+	Rating    int     `json:"rating" bson:"rating"`
 }

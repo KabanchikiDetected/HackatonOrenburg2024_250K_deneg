@@ -11,6 +11,13 @@ paths:
     get:
       summary: List events
       description: List events
+      parameters:
+        - in: query
+          name: isFinished
+          description: Filter by is_finished
+          schema:
+            type: boolean
+          required: false
       responses:
         '200':
           description: OK

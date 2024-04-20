@@ -2,17 +2,11 @@ package service
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log/slog"
 
 	"github.com/KabanchikiDetected/hackaton/events/internal/domain"
-)
-
-var (
-	InternalServerError = errors.New("internal server error")
-	BadRequest          = errors.New("bad request")
-	NotFound            = errors.New("not found")
+	"github.com/KabanchikiDetected/hackaton/events/internal/errors"
 )
 
 type Storage interface {
@@ -46,7 +40,7 @@ func (s *Service) Event(ctx context.Context, id string) (domain.Event, error) {
 	event, err := s.storage.Event(ctx, id)
 	if err != nil {
 		s.log.Error("Error getting event", err)
-		return domain.Event{}, fmt.Errorf("%w: %s", NotFound, "error getting event")
+		return domain.Event{}, fmt.Errorf("%w: %s", errors.NotFound, "error getting event")
 	}
 	log.Info("Got event")
 	return event, nil
@@ -59,7 +53,7 @@ func (s *Service) Events(ctx context.Context, isFinished bool) ([]domain.Event, 
 	events, err := s.storage.Events(ctx, isFinished)
 	if err != nil {
 		s.log.Error("Error getting events", err)
-		return nil, fmt.Errorf("%w: %s", InternalServerError, "error getting events")
+		return nil, fmt.Errorf("%w: %s", errors.InternalServerError, "error getting events")
 	}
 	log.Info("Got events")
 	return events, nil
@@ -73,7 +67,7 @@ func (s *Service) AddEvent(ctx context.Context, event domain.Event) (string, err
 	id, err := s.storage.AddEvent(ctx, event)
 	if err != nil {
 		s.log.Error("Error adding event", err)
-		return "", fmt.Errorf("%w: %s", InternalServerError, "error adding event")
+		return "", fmt.Errorf("%w: %s", errors.InternalServerError, "error adding event")
 	}
 	log.Info("Added event")
 	return id, nil
@@ -87,7 +81,7 @@ func (s *Service) UpdateEvent(ctx context.Context, id string, event domain.Event
 	err := s.storage.UpdateEvent(ctx, id, event)
 	if err != nil {
 		s.log.Error("Error updating event", err)
-		return fmt.Errorf("%w: %s", NotFound, "error updating event")
+		return fmt.Errorf("%w: %s", errors.NotFound, "error updating event")
 	}
 	log.Info("Updated event")
 	return nil
@@ -101,7 +95,7 @@ func (s *Service) DeleteEvent(ctx context.Context, id string) error {
 	err := s.storage.DeleteEvent(ctx, id)
 	if err != nil {
 		s.log.Error("Error deleting event", err)
-		return fmt.Errorf("%w: %s", NotFound, "error deleting event")
+		return fmt.Errorf("%w: %s", errors.NotFound, "error deleting event")
 	}
 	log.Info("Deleted event")
 	return nil
@@ -115,7 +109,7 @@ func (s *Service) InsertImage(ctx context.Context, id string, image string) erro
 	err := s.storage.InsertImage(ctx, id, image)
 	if err != nil {
 		s.log.Error("Error inserting image", err)
-		return fmt.Errorf("%w: %s", NotFound, "error inserting image")
+		return fmt.Errorf("%w: %s", errors.NotFound, "error inserting image")
 	}
 	log.Info("Inserted image")
 	return nil

@@ -5,8 +5,8 @@ import (
 	"log/slog"
 
 	"github.com/KabanchikiDetected/hackaton/events/internal/server"
-	"github.com/KabanchikiDetected/hackaton/events/internal/service"
-	mongoStorage "github.com/KabanchikiDetected/hackaton/events/internal/storage/mongo"
+	eventsService "github.com/KabanchikiDetected/hackaton/events/internal/service/events"
+	eventsMongoStorage "github.com/KabanchikiDetected/hackaton/events/internal/storage/mongo/events"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -18,9 +18,9 @@ type App struct {
 
 func New(log *slog.Logger) *App {
 	collection := connectToMongoDB()
-	storage := mongoStorage.New(collection)
+	eventsStorage := eventsMongoStorage.New(collection)
 
-	eventService := service.New(log, storage)
+	eventService := eventsService.New(log, eventsStorage)
 
 	server := server.New(eventService)
 	return &App{

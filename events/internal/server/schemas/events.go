@@ -37,6 +37,6 @@ func (s *EventSchema) ToDomain() (domain.Event, error) {
 		EndDate:     endDate,
 		IsFinished:  s.IsFinished,
 		Image:       s.Image,
-		Rating:      float64(s.Rating),
+		Rating:      s.Rating,
 	}, nil
 }

@@ -20,6 +20,7 @@ type EventService interface {
 	UpdateEvent(ctx context.Context, id string, event domain.Event) error
 	DeleteEvent(ctx context.Context, id string) error
 	InsertImage(ctx context.Context, id string, image string) error
+	SearchByTitle(ctx context.Context, title string) ([]domain.Event, error)
 }
 
 type EventRouter struct {
@@ -55,11 +56,27 @@ func (h *EventRouter) event(w http.ResponseWriter, r *http.Request) {
 func (h *EventRouter) events(w http.ResponseWriter, r *http.Request) {
 	isFinished := utils.GetBoolQuery(r.URL.Query().Get("is_finished"))
 
+	title := r.URL.Query().Get("title")
+	if title != "" {
+		events, err := h.service.SearchByTitle(r.Context(), title)
+		if err != nil {
+			utils.HandleError(err, w)
+			return
+		}
+		err = utils.Encode(w, r, events)
+		if err != nil {
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	events, err := h.service.Events(r.Context(), isFinished)
 	if err != nil {
 		utils.HandleError(err, w)
 		return
 	}
+
 	err = utils.Encode(w, r, events)
 	if err != nil {
 		return

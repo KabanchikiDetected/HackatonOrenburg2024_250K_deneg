@@ -132,3 +132,18 @@ func (s *Storage) InsertImage(ctx context.Context, id string, image string) erro
 	)
 	return err
 }
+
+func (s *Storage) SearchByTitle(ctx context.Context, title string) ([]domain.Event, error) {
+	const op = "mongo.SearchByTitle"
+
+	cursor, err := s.collection.Find(ctx, bson.M{"title": bson.M{"$regex": title, "$options": "i"}})
+	if err != nil {
+		return nil, err
+	}
+
+	var events []domain.Event
+	if err = cursor.All(ctx, &events); err != nil {
+		return nil, err
+	}
+	return events, nil
+}

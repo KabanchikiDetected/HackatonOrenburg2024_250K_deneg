@@ -16,6 +16,7 @@ type Storage interface {
 	UpdateEvent(ctx context.Context, id string, event domain.Event) error
 	DeleteEvent(ctx context.Context, id string) error
 	InsertImage(ctx context.Context, id string, image string) error
+	SearchByTitle(ctx context.Context, title string) ([]domain.Event, error)
 }
 
 type Service struct {
@@ -113,4 +114,18 @@ func (s *Service) InsertImage(ctx context.Context, id string, image string) erro
 	}
 	log.Info("Inserted image")
 	return nil
+}
+
+func (s *Service) SearchByTitle(ctx context.Context, title string) ([]domain.Event, error) {
+	const op = "service.SearchByTitle"
+
+	log := s.log.With("operation", op)
+	log.Info("Searching by title")
+	events, err := s.storage.SearchByTitle(ctx, title)
+	if err != nil {
+		s.log.Error("Error searching by title", err)
+		return nil, fmt.Errorf("%w: %s", errors.NotFound, "error searching by title")
+	}
+	log.Info("Searched by title")
+	return events, nil
 }

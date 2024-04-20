@@ -17,6 +17,7 @@ services:
       - search_and_filter
     volumes:
       - ./files:/tmp/files/
+      - ./frontend/dist:/root/mc/
 
   # Our code
   users:

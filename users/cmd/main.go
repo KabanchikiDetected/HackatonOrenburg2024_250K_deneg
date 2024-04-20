@@ -12,7 +12,11 @@ import (
 func main() {
 	config.LoadConfig()
 
-	log := slog.Default()
+	h := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	})
+
+	log := slog.New(h)
 
 	app := application.New(log)
 	app.Run()

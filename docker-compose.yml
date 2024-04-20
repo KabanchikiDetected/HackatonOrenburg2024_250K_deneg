@@ -14,6 +14,7 @@ services:
       - news
       - events
       - universities
+      - search_and_filter
     volumes:
       - ./files:/tmp/files/
 
@@ -92,7 +93,21 @@ services:
       - backbone
     volumes:
       - ./files:/app/media/
-  
+
+  search_and_filter:
+    container_name: search_and_filter
+    hostname: search_and_filter
+    restart: always
+    build:
+      context: ./search_and_filter
+    ports:
+      - "8004:8004"
+    expose:
+      - 8004
+    env_file:
+      - ./search_and_filter/.env-local
+    networks:
+      - backbone
   
   # databases
   mongo:

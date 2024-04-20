@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #fff;
+
+  .header__logo img {
+    width: 150px;
+    object-fit: cover;
+  }
+
+  .header__signup a {
+    padding: .7rem 1rem;
+    text-decoration: none;
+    color: white;
+    background-color: #2196F3;
+    border-radius: .5rem;
+    font-weight: 900;
+
+    @media (hover:hover) {
+      &:hover {
+        background-color: #1976D2;
+      }
+    }
+  }
+}

@@ -66,6 +66,23 @@ services:
     networks:
       - backbone
   
+  # universities:
+  #   container_name: news
+  #   hostname: news
+  #   restart: always
+  #   build:
+  #     context: ./news
+  #   ports:
+  #     - "8001:8001"
+  #   expose:
+  #     - 8001
+  #   depends_on:
+  #     - postgres
+  #   env_file:
+  #     - ./news/.env-local
+  #   networks:
+  #     - backbone
+  
   
   # databases
   mongo:

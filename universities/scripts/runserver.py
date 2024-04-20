@@ -13,6 +13,7 @@ def main():
     host = os.getenv('HOST', 'localhost')
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'universities.settings')
+    execute_from_command_line(['manage.py', 'migrate'])
     execute_from_command_line(['manage.py', 'runserver', f'{host}:{port}'])
 
 

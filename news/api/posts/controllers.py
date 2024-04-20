@@ -318,3 +318,18 @@ class CommentsPostController(APIView):
             serializer.data,
             status.HTTP_201_CREATED
         )
+
+
+class SearchPostController(APIView):
+    serializer_class = serializers.PostSerializer(many=True)
+    permission_classes = (permissions.AllowAny, )
+    
+    def get(self, request: Request):
+        search = request.query_params.get("search")
+        
+        serializer = services.PostService.search(search)
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )

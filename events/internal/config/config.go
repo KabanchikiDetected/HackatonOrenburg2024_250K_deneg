@@ -29,11 +29,12 @@ type serverConfig struct {
 }
 
 type storageConfig struct {
-	URI        string `yaml:"uri"`
-	Username   string `yaml:"username"`
-	Password   string `yaml:"password"`
-	DBName     string `yaml:"db_name"`
-	Collection string `yaml:"collection"`
+	URI              string `yaml:"uri"`
+	Username         string `yaml:"username"`
+	Password         string `yaml:"password"`
+	DBName           string `yaml:"db_name"`
+	EventsCollection string `yaml:"events_collection"`
+	UsersCollection  string `yaml:"users_collection"`
 }
 
 // Cfg return copy of cfg (line 18)

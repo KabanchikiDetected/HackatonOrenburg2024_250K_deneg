@@ -10,6 +10,7 @@ import (
 	"github.com/KabanchikiDetected/hackaton/events/internal/domain"
 	"github.com/KabanchikiDetected/hackaton/events/internal/server/schemas"
 	"github.com/KabanchikiDetected/hackaton/events/internal/server/utils"
+	auth "github.com/KabanchikiDetected/hackaton/events/pkg/users"
 	"github.com/go-pkgz/routegroup"
 )
 
@@ -190,10 +191,11 @@ func (h *EventRouter) insertImage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (r *EventRouter) init() {
+	key := utils.GetKey()
 	r.mux.HandleFunc("GET /", r.events)
 	r.mux.HandleFunc("GET /{id}", r.event)
-	r.mux.HandleFunc("POST /", r.addEvent)
-	r.mux.HandleFunc("PUT /{id}", r.updateEvent)
-	r.mux.HandleFunc("DELETE /{id}", r.deleteEvent)
-	r.mux.HandleFunc("POST /{id}/image", r.insertImage)
+	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("POST /", r.addEvent)
+	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("PUT /{id}", r.updateEvent)
+	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("DELETE /{id}", r.deleteEvent)
+	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("POST /{id}/image", r.insertImage)
 }

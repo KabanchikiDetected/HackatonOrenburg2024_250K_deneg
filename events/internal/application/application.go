@@ -6,27 +6,33 @@ import (
 
 	"github.com/KabanchikiDetected/hackaton/events/internal/server"
 	eventsService "github.com/KabanchikiDetected/hackaton/events/internal/service/events"
+	usersService "github.com/KabanchikiDetected/hackaton/events/internal/service/users"
 	eventsMongoStorage "github.com/KabanchikiDetected/hackaton/events/internal/storage/mongo/events"
+	usersMongoStorage "github.com/KabanchikiDetected/hackaton/events/internal/storage/mongo/users"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type App struct {
-	log        *slog.Logger
-	server     *server.Server
-	collection *mongo.Collection
+	log              *slog.Logger
+	server           *server.Server
+	eventsCollection *mongo.Collection
+	usersCollection  *mongo.Collection
 }
 
 func New(log *slog.Logger) *App {
-	collection := connectToMongoDB()
-	eventsStorage := eventsMongoStorage.New(collection)
+	eventsCollection, usersCollection := connectToMongoDB()
+	eventsStorage := eventsMongoStorage.New(eventsCollection)
+	usersStorage := usersMongoStorage.New(usersCollection, eventsCollection)
 
 	eventService := eventsService.New(log, eventsStorage)
+	usersService := usersService.New(log, usersStorage)
 
-	server := server.New(eventService)
+	server := server.New(eventService, usersService)
 	return &App{
-		log:        log,
-		server:     server,
-		collection: collection,
+		log:              log,
+		server:           server,
+		eventsCollection: eventsCollection,
+		usersCollection:  usersCollection,
 	}
 }
 
@@ -36,5 +42,6 @@ func (app *App) Start() {
 
 func (app *App) Stop() {
 	app.server.Stop()
-	app.collection.Database().Client().Disconnect(context.Background())
+	app.eventsCollection.Database().Client().Disconnect(context.Background())
+	app.usersCollection.Database().Client().Disconnect(context.Background())
 }

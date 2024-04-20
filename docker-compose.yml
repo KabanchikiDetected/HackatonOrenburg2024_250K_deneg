@@ -13,6 +13,9 @@ services:
       - users
       - news
       - events
+      - universities
+    volumes:
+      - ./files:/tmp/files/
 
   # Our code
   users:
@@ -33,7 +36,7 @@ services:
       - backbone
   
   events:
-    container_name: evets
+    container_name: events
     hostname: events
     restart: always
     build:
@@ -48,6 +51,8 @@ services:
       - ENV_TYPE=local
     networks:
       - backbone
+    volumes:
+      - ./files:/app/media/
   
   news:
     container_name: news
@@ -65,23 +70,28 @@ services:
       - ./news/.env-local
     networks:
       - backbone
+    volumes:
+      - ./files:/app/media/
+    
   
-  # universities:
-  #   container_name: news
-  #   hostname: news
-  #   restart: always
-  #   build:
-  #     context: ./news
-  #   ports:
-  #     - "8001:8001"
-  #   expose:
-  #     - 8001
-  #   depends_on:
-  #     - postgres
-  #   env_file:
-  #     - ./news/.env-local
-  #   networks:
-  #     - backbone
+  universities:
+    container_name: universities
+    hostname: universities
+    restart: always
+    build:
+      context: ./universities
+    ports:
+      - "8003:8003"
+    expose:
+      - 8003
+    depends_on:
+      - postgres
+    env_file:
+      - ./universities/.env-local
+    networks:
+      - backbone
+    volumes:
+      - ./files:/app/media/
   
   
   # databases
@@ -111,6 +121,18 @@ services:
       POSTGRES_DB: local
     ports:
       - 5432:5432
+    networks:
+      - backbone
+
+  redis:
+    image: redis:latest
+    hostname: redis
+    container_name: redis
+    environment:
+      - REDIS_DATABASES=1
+    restart: always
+    ports:
+      - "6379:6379"
     networks:
       - backbone
 

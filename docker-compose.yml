@@ -16,6 +16,7 @@ services:
       - universities
       - search_and_filter
       - students
+      - market
     volumes:
       - ./files:/tmp/files/
 
@@ -74,7 +75,6 @@ services:
       - backbone
     volumes:
       - ./files:/app/media/
-    
   
   universities:
     container_name: universities
@@ -122,6 +122,23 @@ services:
       - 8005
     depends_on:
       - mongo
+    environment:
+      - ENV_TYPE=local
+    networks:
+      - backbone
+    volumes:
+      - ./files:/app/media/
+  
+  market:
+    container_name: market
+    hostname: market
+    restart: always
+    build:
+      context: ./market
+    ports:
+      - "8006:8006"
+    expose:
+      - 8006
     environment:
       - ENV_TYPE=local
     networks:

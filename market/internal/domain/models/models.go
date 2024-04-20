@@ -3,8 +3,8 @@ package models
 import "go.mongodb.org/mongo-driver/bson/primitive"
 
 type Product struct {
-	ID    primitive.ObjectID
-	Name  string
-	Image string
-	Price int
+	ID    primitive.ObjectID `bson:"_id"`
+	Name  string             `bson:"name"`
+	Image string             `bson:"image"`
+	Price int                `bson:"price"`
 }

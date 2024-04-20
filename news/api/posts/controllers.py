@@ -1,5 +1,7 @@
 import json
 from django.core.exceptions import BadRequest
+from django.core.cache import cache
+from redis.exceptions import ConnectionError
 from rest_framework.request import Request
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -218,23 +220,54 @@ class PostImageController(APIView):
                 description='Сериализованный список для фильтрации постов',
                 required=False,
                 type=str,
-                examples=[OpenApiExample("some_hashtag", "[\"some_hashtag\"]")]
+                examples=[OpenApiExample("example", "[\"some_hashtag\",\"zxc\"]")]
+            ),
+            OpenApiParameter(
+                name='users',
+                location=OpenApiParameter.QUERY,
+                description='Сериализованный список id пользователей',
+                required=False,
+                type=str,
+                examples=[OpenApiExample("example", "[\"1\",\"2\",\"4\"]")]
             )
         ],
+        responses={
+            status.HTTP_200_OK: serializers.PostSerializer(many=True)
+        }
     )
 )
 class FeedPostController(generics.ListAPIView):
     queryset = services.PostService._get_all()
     serializer_class = serializers.PostSerializer
-    pagination_class = pagination.StandartPagination
     permission_classes = (permissions.AllowAny, )
     
     def get_queryset(self):
+        raw_hashtags = self.request.GET.get("hashtags", "[]")
+        raw_users = self.request.GET.get("users", "[]")
+        
+        try:
+            cache_key = f'hashtags:{raw_hashtags};users:{raw_users}'
+            
+            queryset = cache.get(cache_key)
+            if queryset:
+                return queryset
+        except ConnectionError as e:
+             print("Redis Connection Error:", e)
+
         queryset = super().get_queryset()
         
-        hashtags = json.loads(self.request.GET.get("hashtags", "[]"))
+        hashtags = json.loads(raw_hashtags)
         if hashtags:
             queryset = services.PostService.hashtags_filter(queryset, hashtags)
+        
+        users = json.loads(raw_users)
+        if users:
+            queryset = services.PostService.users_filter(queryset, users)
+        
+        try:
+            cache.add(cache_key, queryset, timeout=60)
+        except ConnectionError as e:
+             print("Redis Connection Error:", e)
 
         return queryset
 

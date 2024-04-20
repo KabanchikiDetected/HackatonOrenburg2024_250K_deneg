@@ -57,10 +57,10 @@ func (s *Server) Stop() {
 
 func (s *Server) initServer() {
 	jwtMV := MiddlwareJWT(config.Config().JWT.PublicKey)
-	s.mux.HandleFunc("/products", s.getProducts)
-	s.mux.HandleFunc("/product", s.getProduct)
-	s.mux.With(jwtMV).HandleFunc("/buy", s.buyProduct)
-	s.mux.With(jwtMV).HandleFunc("/create", s.createProduct)
+	s.mux.HandleFunc("GET /products", s.getProducts)
+	s.mux.HandleFunc("GET /product/{id}", s.getProduct)
+	s.mux.With(jwtMV).HandleFunc("POST /products/buy", s.buyProduct)
+	s.mux.With(jwtMV).HandleFunc("POST /products", s.createProduct)
 }
 
 func (s *Server) Handler() http.Handler {

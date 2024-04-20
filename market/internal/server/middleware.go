@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rsa"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -21,12 +22,14 @@ type TokenPayload struct {
 }
 
 func MiddlwareJWT(publicKey *rsa.PublicKey) func(http.Handler) http.Handler {
+	fmt.Printf("publicKey: %v\n", publicKey)
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			// Get token from header
 			var headerToken string
 			_, err := fmt.Sscanf(r.Header.Get("Authorization"), "Bearer %s", &headerToken)
 			if err != nil {
+				log.Println("No token")
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
@@ -38,6 +41,7 @@ func MiddlwareJWT(publicKey *rsa.PublicKey) func(http.Handler) http.Handler {
 			})
 			// error handling
 			if err != nil {
+				log.Printf("parse token err: %v\n", err)
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
@@ -45,12 +49,14 @@ func MiddlwareJWT(publicKey *rsa.PublicKey) func(http.Handler) http.Handler {
 			// is token valid
 			// idgaf what is token.Valid but anyway
 			if !token.Valid {
+				log.Println("token invalid")
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
 
 			// check expiration
 			if isExpiredToken(claims) {
+				log.Println("token expired err")
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}

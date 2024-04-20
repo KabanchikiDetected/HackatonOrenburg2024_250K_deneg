@@ -9,8 +9,16 @@ import (
 )
 
 func (s *Server) createProduct(w http.ResponseWriter, r *http.Request) {
+	payload, err := FromContext(r.Context())
+	if err != nil {
+		return
+	}
+	if payload.Role != "deputy" {
+		http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+	}
+
 	var req requests.CreateProduct
-	err := Decode(w, r, &req)
+	err = Decode(w, r, &req)
 	if err != nil {
 		return
 	}
@@ -34,10 +42,11 @@ func (s *Server) getProducts(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (s *Server) getProduct(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Query().Get("id")
+	id := r.PathValue("id")
 	product, err := s.service.Product(r.Context(), id)
 	if err != nil {
 		handleError(err, w)
@@ -47,11 +56,11 @@ func (s *Server) getProduct(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
-
+	w.WriteHeader(http.StatusOK)
 }
 
 func (s *Server) buyProduct(w http.ResponseWriter, r *http.Request) {
-	productId := r.URL.Query().Get("product_id")
+	productId := r.PathValue("id")
 	payload, err := FromContext(r.Context())
 	if err != nil {
 		return

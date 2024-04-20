@@ -2,14 +2,12 @@ package config
 
 import (
 	"crypto/rsa"
-	"crypto/x509"
-	"encoding/pem"
 	"errors"
 	"fmt"
 	"log"
 	"os"
-	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
@@ -22,16 +20,15 @@ const (
 var cfg config
 
 type config struct {
-	EnvType string        `yaml:"env_type"`
-	JWT     jwtConfig     `yaml:"jwt"`
-	Storage storageConfig `yaml:"storage"`
-	Server  serverConfig  `yaml:"server"`
+	EnvType      string             `yaml:"env_type"`
+	JWT          jwtConfig          `yaml:"jwt"`
+	Storage      storageConfig      `yaml:"storage"`
+	Server       serverConfig       `yaml:"server"`
+	EventsClient eventsClientConfig `yaml:"events_client"`
 }
 
 type jwtConfig struct {
-	TokenTTl      time.Duration `yaml:"token_ttl"`
-	PathPublicKey string        `yaml:"public_key_path"` // Ignore this field
-	PrivateKey    *rsa.PrivateKey
+	PathPublicKey string `yaml:"public_key_path"` // Ignore this field
 	PublicKey     *rsa.PublicKey
 }
 
@@ -45,6 +42,10 @@ type storageConfig struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 	DBName   string `yaml:"db_name"`
+}
+
+type eventsClientConfig struct {
+	URL string
 }
 
 // Cfg return copy of cfg (line 18)
@@ -81,17 +82,14 @@ func getEnvType() string {
 }
 
 func readKeys() {
-
 	// Read public
 	pem_key, err := os.ReadFile(cfg.JWT.PathPublicKey)
 	if err != nil {
-		log.Fatal(err, cfg.JWT.PathPublicKey)
+		panic(err)
 	}
-	data, _ := pem.Decode(pem_key)
-	key, _ := x509.ParsePKCS1PublicKey(data.Bytes)
+	key, err := jwt.ParseRSAPublicKeyFromPEM(pem_key)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
-
 	cfg.JWT.PublicKey = key
 }

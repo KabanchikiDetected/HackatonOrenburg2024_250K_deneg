@@ -1,7 +1,7 @@
 package requests
 
 type CreateProduct struct {
-	Name  string
-	Image string // base64 encoded image
-	Price int
+	Name  string `json:"name"`
+	Image string `json:"image"` // base64 encoded image
+	Price int    `json:"price"`
 }

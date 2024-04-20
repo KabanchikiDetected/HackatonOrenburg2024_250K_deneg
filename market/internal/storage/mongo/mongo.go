@@ -29,7 +29,7 @@ func New() *Storage {
 	}
 }
 
-func (s *Storage) CreateProduct(ctx context.Context, product *models.Product) error {
+func (s *Storage) CreateProduct(ctx context.Context, product models.Product) error {
 	const op = "mongo.CreateProduct"
 
 	_, err := s.col.InsertOne(ctx, product)

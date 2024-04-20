@@ -1,0 +1,67 @@
+main.rating {
+  overflow: auto;
+  justify-content: normal;
+  max-height: calc(100dvh - 15dvh);
+
+  .rates {
+    display: flex;
+    flex-direction: column;
+    
+    .rate {
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 1rem;
+
+      .rating {
+        font-size: 2.5rem;
+        font-weight: 900;
+      }
+
+      .avatar {
+        width: 75px;
+        height: 75px;
+
+        img {
+          width: 75px;
+          height: 75px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+      }
+
+      .about {
+        .name {
+          font-weight: 700;
+        }
+
+        .university {
+          width: 250px;
+          color: #5288C1;
+          text-decoration: underline;
+        }
+      }
+
+      .stars {
+        display: flex;
+        flex-direction: column;
+        .stars__stars {
+          display: flex;
+          align-items: center;
+          gap: .5rem;
+          color: #5288C1;
+        }
+
+        img {
+          width: 20px;
+          height: 20px;
+          object-fit: contain;
+          justify-self: end;
+          align-self: flex-end;
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 /* @ts-ignore */
 import classes from "./index.module.scss";
-
+//@ts-ignore
 const UniversityEditStructure = ({ setIsOpen, faculties, setFaculties }: any) => {
 
   function addFaculty() {
@@ -20,19 +20,19 @@ const UniversityEditStructure = ({ setIsOpen, faculties, setFaculties }: any) =>
           <div className={classes.faculty}>Факультет</div>
           <div className={classes.department}>Кафедра</div>
         </div> */}
-        {faculties.map((item: any, i1) => {
+        {//@ts-ignore
+        faculties.map((item: any, i1) => {
           return (
             <div className={classes.faculty}>
               <div className={classes.faculty_wrapper}>
               <input className={classes.faculty} />
               <img src="/images/close.svg" alt="" />
               </div>
-              {item.departments.map((department, i2) => {
+              {item.departments.map((//@ts-ignore
+              department, i2) => {
                 return (
                   <div className={classes.department_wrapper}>
-                    <input value={department} onChange={e => {
-                      // setFaculties()
-                    }} />
+                    <input value={department}/>
 
                   </div>
 

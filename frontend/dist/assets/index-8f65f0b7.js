@@ -1,0 +1,1 @@
+import{j as o}from"./index-9b232465.js";const i=({children:a,isOpen:s,setIsOpen:t})=>o.jsx("div",{className:s?"modal active":"modal",onClick:()=>t(!1),children:o.jsx("div",{className:"modal__content",onClick:n=>n.stopPropagation(),children:a})});export{i as M};

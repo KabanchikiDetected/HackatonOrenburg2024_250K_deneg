@@ -59,9 +59,11 @@ const StudentReg = () => {
     async function request() {
       let response = await fetch("/api/universities/university/");
       response = await response.json();
+      //@ts-ignore
       setUniversities(response);
       setData({
         ...data,
+        //@ts-ignore
         university: response[0].id,
       });
     }
@@ -76,10 +78,12 @@ const StudentReg = () => {
           `/api/universities/university/${data.university}/department/`
         );
         response = await response.json();
+        //@ts-ignore
         setFaculties(response);
 
         setData({
           ...data,
+          //@ts-ignore
           faculty_id: response[0].id,
         });
       }
@@ -99,10 +103,12 @@ const StudentReg = () => {
           `/api/universities/university/${data.university}/department/${data.faculty_id}/group/`
         );
         response = await response.json();
+        //@ts-ignore
         setDepartments(response);
 
         setData({
           ...data,
+          //@ts-ignore
           department: response[0].id,
         });
       }
@@ -145,19 +151,24 @@ const StudentReg = () => {
           <select
             name="university"
             id=""
-            value={universities[data.university]}
+            value={//@ts-ignore
+              universities[data.university]}
             onChange={(e) => {
               const selectedUniversityId =
                 e.target.selectedOptions[0].getAttribute("name");
-              setData({ ...data, university: selectedUniversityId });
+              setData(//@ts-ignore
+              { ...data, university: selectedUniversityId });
             }}
           >
             {universities.map((item) => {
               return (
                 // @ts-ignore
                 <option
+                // @ts-ignore
                   value={item.name}
+                  // @ts-ignore
                   name={item.id}
+                  // @ts-ignore
                   key={item.name + item.id}
                 >
                   {/* @ts-ignore */}
@@ -169,18 +180,22 @@ const StudentReg = () => {
           <label htmlFor="faculty">
             <p>Факультет</p>
           </label>
+          {/* @ts-ignore */}
           <select name="faculty" value={faculties[data.faculty_id]} id="">
             {faculties.map((item) => {
               return (
-                // @ts-ignore
                 <option
+                // @ts-ignore
                   value={item.name}
                   onChange={(e) => {
                     const selectedUniversityId =
+                    // @ts-ignore
                       e.target.selectedOptions[0].getAttribute("name");
                     setData({ ...data, faculty_id: selectedUniversityId });
                   }}
+                  // @ts-ignore
                   name={item.id}
+                  // @ts-ignore
                   key={item.name + item.id}
                 >
                   {/* @ts-ignore */}
@@ -193,18 +208,22 @@ const StudentReg = () => {
           <label htmlFor="department">
             <p>Кафедра</p>
           </label>
+          {/* @ts-ignore */}
           <select name="department" id="" value={departments[data.department]}>
             {departments.map((item) => {
               return (
-                // @ts-ignore
                 <option
                   onChange={(e) => {
                     const selectedUniversityId =
+                    // @ts-ignore
                       e.target.selectedOptions[0].getAttribute("name");
                     setData({ ...data, department: selectedUniversityId });
                   }}
+                  // @ts-ignore
                   value={item.name}
+                  // @ts-ignore
                   name={item.id}
+                  // @ts-ignore
                   key={item.name + item.id}
                 >
                   {/* @ts-ignore */}

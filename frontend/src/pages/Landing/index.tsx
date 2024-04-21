@@ -1,4 +1,3 @@
-import Rating from "features/components/Rating";
 import "./index.scss";
 import { Link } from "react-router-dom";
 import Footer from "features/components/Footer";

@@ -5,14 +5,13 @@ interface IUser {
   id: string,
   name: string,
   last_name: string,
-  education: string,
-  raiting: number,
+  education?: string,
+  rating?: number,
 }
 
 interface IRaiting {
-  id: string,
   user_id: string,
-  raiting: number,
+  rating: number,
 }
 
 const Rating = () => {
@@ -20,27 +19,65 @@ const Rating = () => {
   const [users, setUsers] = useState<IUser[]>([])
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8006/api/raiting/")
-    .then(response => response.json())
-    .then((data: IRaiting[]) => {
-      data.map(raiting => {
-        fetch(`/api/students/${raiting.user_id}`)
-          .then(response => response.json())
-          .then(userData => ({
-            ...userData,
-            raiting: raiting.raiting
-          }))
+    async function reqeust() {
+      const response = await fetch("/api/events/users/rating")
+      const rating = await response.json()
+
+      // const users = await data.map((raiting: IRaiting) => fetch(`/api/students/${raiting.user_id}`).then(response => response.json()))
+      Promise.all(rating.map((raiting: IRaiting) => fetch(`/api/students/${raiting.user_id}`).then(response => response.json())))
+      .then(data => data.map((userData, index) => ({ ...userData, rating: rating[index].rating })))
+
+      
+      //@ts-ignore
+      .then((data: IUser) => {
+        console.log(data)
+        //@ts-ignore
+        setUsers(data)
       })
-    })
-    .then(data => {
-      console.log(data);
-    })
+      // setUsers(
+      //   //@ts-ignore
+      //   users.map((user, index) => ({
+      //     ...user,
+      //     raiting: data[index]
+      //   }))
+      // )
+      // .then((data: IRaiting[]) => {
+      //   Promise.all(data.map(raiting => fetch(`/api/students/${raiting.user_id}`).then(response => response.json())))
+      //   .then(data => data.map((userData, index) => ({ ...userData[0], raiting: data[index].raiting })))
+      //   .then(users => {
+      //     setUsers(users)
+      // })
+    }
+
+    reqeust();
+
   }, []);
 
   return (
     <main className="rating">
       <div className="rates">
-        <div className="rate">
+        { users.map((user, index) => 
+          <div className="rate">
+
+            <div className="rating">#{index + 1}</div>
+            <div className="avatar">
+              <img src="/images/user.png" alt="" />
+            </div>
+            <div className="about">
+              <div className="name">
+                {user.name} {user.last_name}
+              </div>
+            </div>
+            <div className="stars">
+              <div className="stars__stars">
+                <img src="/images/star.png" alt="" /> {user.rating}
+              </div>
+            </div>
+          </div>
+        ) }
+  
+        {/* <div className="rate">
+
           <div className="rating">#9</div>
           <div className="avatar">
             <img src="/images/user.png" alt="" />
@@ -59,7 +96,7 @@ const Rating = () => {
             </div>
             <img src="/images/flag.svg" alt="" />
           </div>
-        </div>
+        </div> */}
       </div>
     </main>
   );

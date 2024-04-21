@@ -135,3 +135,15 @@ class MyEducationController(APIView):
             serializer.data,
             status.HTTP_200_OK
         )
+
+
+class UserEducationController(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request: Request, user_id: str):        
+        serializer = get_full_university_by_user_id(user_id)
+        
+        return Response(
+            serializer.data,
+            status.HTTP_200_OK
+        )

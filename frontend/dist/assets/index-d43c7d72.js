@@ -1,0 +1,1 @@
+import{j as s}from"./index-b1e3b5eb.js";const t=()=>s.jsxs("main",{className:"institution",children:[s.jsx("h1",{children:"Предприятиям"}),s.jsx("p",{children:"Страница находится в разработке"})]});export{t as default};

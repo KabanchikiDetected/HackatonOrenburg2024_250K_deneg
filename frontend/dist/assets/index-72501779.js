@@ -1,0 +1,1 @@
+import{j as s}from"./index-b1e3b5eb.js";const e=()=>s.jsxs("main",{className:"students",children:[s.jsx("h1",{children:"Студентам"}),s.jsx("p",{children:"Страница находится в разработке"})]});export{e as default};

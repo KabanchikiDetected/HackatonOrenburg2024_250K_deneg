@@ -120,7 +120,7 @@ class GroupService:
         serializer = serializers.UserToGroupSerializer(data={
             "user_id": user_id,
             "group_id": group.id,
-            "is_confirmed": False
+            "is_confirmed": True
         })
         
         if not serializer.is_valid():

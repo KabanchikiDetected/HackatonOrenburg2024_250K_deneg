@@ -1,0 +1,26 @@
+.modal {
+  z-index: 10;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(0);
+  transition: .3s ease-in-out;
+
+  
+
+  .modal__content {
+    padding: 1rem;
+    background-color: white;
+    border-radius: 1rem;
+    min-width: 300px;
+  }
+}
+.modal.active {
+  transform: scale(1);
+}

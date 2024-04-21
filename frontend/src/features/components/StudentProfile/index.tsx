@@ -1,8 +1,26 @@
+import { useState } from "react";
 import "./index.scss";
+import Modal from "features/components/Modal";
+import StudentNewPost from "features/components/Popups/StudentNewPost";
+import StudentEditPost from "../Popups/StudentEditPost";
+import RatingHistory from "../Popups/RatingHistory";
 
 const StudentProfile = () => {
+  const [isOpenCreate, setIsOpenCreate] = useState(false);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const [isOpenRating, setIsOpenRating] = useState(false);
+
   return (
     <main className="profile">
+      <Modal isOpen={isOpenCreate} setIsOpen={setIsOpenCreate}>
+        <StudentNewPost setIsOpen={setIsOpenCreate} />
+      </Modal>
+      <Modal isOpen={isOpenEdit} setIsOpen={setIsOpenEdit}>
+        <StudentEditPost setIsOpen={setIsOpenEdit} />
+      </Modal>
+      <Modal isOpen={isOpenRating} setIsOpen={setIsOpenRating}>
+        <RatingHistory setIsOpen={setIsOpenRating} />
+      </Modal>
       <div className="about">
         <div className="about__row row">
           <div className="row__logo">
@@ -25,7 +43,9 @@ const StudentProfile = () => {
             </div>
           </div>
         </div>
-        <div className="rating__row">
+        <div className="rating__row"
+        onClick={() => setIsOpenRating(true)}
+        >
           <div className="rate">
             <div className="level">1 уровень</div>
             <div className="img">
@@ -69,13 +89,29 @@ const StudentProfile = () => {
         </div>
       </div>
 
-      <button className="new-post">
-        <div className="avatar">
+      <button
+        className="new-post"
+        onClick={() => {
+          setIsOpenCreate(true);
+        }}
+      >
+        <div
+          className="avatar"
+          onClick={() => {
+            setIsOpenCreate(true);
+          }}
+        >
           <img src="/images/user.png" alt="" />
         </div>
         <div className="wrapper">
-          <input placeholder="Создать пост..." type="text" disabled />
-          <img src="/images/note.svg" alt="" />
+          <p>Создать пост...</p>
+          <img
+            src="/images/note.svg"
+            onClick={() => {
+              setIsOpenCreate(true);
+            }}
+            alt=""
+          />
         </div>
       </button>
 
@@ -113,9 +149,18 @@ const StudentProfile = () => {
             </div>
           </div>
           <div className="post__row row row-space">
-            <button className="like">
-              <img src="/images/like.svg" alt="" />
-            </button>
+            <div className="wrapper">
+              <button className="like">
+                <img src="/images/like.svg" alt="" />
+              </button>
+              <button className="edit"
+              onClick={() => {
+                setIsOpenEdit(true);
+              }}
+              >
+                <img src="/images/edit.svg" alt="" />
+              </button>
+            </div>
             <p className="blue-bold">Творчество</p>
           </div>
         </div>

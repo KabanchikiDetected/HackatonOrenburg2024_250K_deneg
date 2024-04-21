@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import "./index.scss";
 
-const UniversityReg = () => {
+const StudentReg = () => {
   const [data, setData] = useState({
     photoPreview: "",
     name: "",
@@ -9,6 +9,9 @@ const UniversityReg = () => {
     faculty: "",
     department: "",
     about: "",
+    city: "",
+    short_name: "",
+    long_name: "",
   });
   const ref = useRef(null);
 
@@ -16,8 +19,21 @@ const UniversityReg = () => {
     setData({ ...data, photoPreview: URL.createObjectURL(e.target.files[0]) });
   }
 
-  function regStudent() {
-    console.log(data);
+  async function regUniversity() {
+    let response = await fetch("/api/universities/university/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (!response.ok) {
+      response = await response.json();
+    }
+
+    console.log(response)
   }
 
   return (
@@ -26,45 +42,64 @@ const UniversityReg = () => {
         <div className="avatar">
           <img src={data.photoPreview} alt="" />
           <input
-            value={''}
+            value={""}
             onChange={(e) => changeFile(e)}
             style={{ display: "none" }}
             ref={ref}
             type="file"
           />
-          <button onClick={() => ref.current.click()}>Добавить фото</button>
+  {/* @ts-ignore */}
+          <button className="add-photo" onClick={() => ref.current.click()}>
+            Добавить фото
+          </button>
         </div>
 
         <div className="info">
+          <label htmlFor="short-name">
+            <p>Короткое название ВУЗа</p>
+          </label>
           <input
-            value={data.name}
-            onChange={(e) => setData({ ...data, name: e.target.value })}
+            id="short-name"
+            value={data.short_name}
+            onChange={(e) => setData({ ...data, short_name: e.target.value })}
             type="text"
-            placeholder="Короткое название ВУЗа"
           />
+          <label htmlFor="university">
+            <p>Полное название ВУЗа</p>
+          </label>
           <input
-            value={data.university}
-            onChange={(e) => setData({ ...data, university: e.target.value })}
+            id="university"
+            value={data.long_name}
+            onChange={(e) => setData({ ...data, long_name: e.target.value })}
             type="text"
-            placeholder=""
           />
+          <label htmlFor="faculty">
+            <p>Город</p>
+          </label>
           <input
-            value={data.faculty}
-            onChange={(e) => setData({ ...data, faculty: e.target.value })}
+            id="city"
+            value={data.city}
+            onChange={(e) => setData({ ...data, city: e.target.value })}
             type="text"
-            placeholder="Город"
           />
+
+          <button className="add-struct">
+            <p>Добавить структуру</p>
+          </button>
         </div>
       </div>
+      <label htmlFor="about">О ВУЗе</label>
       <textarea
         value={data.about}
         onChange={(e) => setData({ ...data, about: e.target.value })}
-        placeholder="О себе"
+        id="about"
       />
       <br />
-      <button>Зарегистрироваться</button>
+      <button onClick={regUniversity} className="submit">
+        Создать
+      </button>
     </main>
   );
 };
 
-export default UniversityReg;
+export default StudentReg;

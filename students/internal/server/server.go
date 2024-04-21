@@ -24,6 +24,7 @@ func New(
 
 	mux := routegroup.New(httpMx)
 	mux.Use(middlewares.SetHeaders)
+	mux.Use(middlewares.MiddlewareCors)
 
 	users.Register(usersService, mux.Mount("/users"))
 

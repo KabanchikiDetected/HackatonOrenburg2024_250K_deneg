@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/KabanchikiDetected/hackaton/events/internal/domain"
+	"github.com/KabanchikiDetected/hackaton/events/internal/errors"
 	mongoStorage "github.com/KabanchikiDetected/hackaton/events/internal/storage/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -76,4 +77,31 @@ func (s *Storage) AddEventToUser(ctx context.Context, studentID string, eventID 
 		return err
 	}
 	return nil
+}
+
+func (s *Storage) DicrementRating(ctx context.Context, id string, rating int) error {
+	objectID, err := mongoStorage.ConvertStringToObjectID(id)
+	if err != nil {
+		return err
+	}
+	var user domain.EventsToStudent
+	if err = s.usersCollection.FindOne(ctx, bson.M{"user_id": objectID}).Decode(&user); err != nil {
+		return err
+	}
+	if user.Rating < rating {
+		return errors.BadRequest
+	}
+
+	_, err = s.usersCollection.UpdateOne(
+		ctx,
+		bson.M{"user_id": objectID},
+		bson.D{
+			{
+				Key: "$inc", Value: bson.D{
+					{Key: "rating", Value: -rating},
+				},
+			},
+		},
+	)
+	return err
 }

@@ -1,0 +1,1 @@
+import{j as s}from"./index-26fc34b5.js";const e=()=>s.jsxs("main",{className:"university",children:[s.jsx("h1",{children:"ВУЗам"}),s.jsx("p",{children:"Страница находится в разработке"})]});export{e as default};

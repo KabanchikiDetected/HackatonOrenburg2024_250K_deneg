@@ -1,12 +1,14 @@
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import "./index.scss";
 
 const StudentReg = () => {
+  const [universities, setUniversities] = useState([]);
   const [data, setData] = useState({
     photoPreview: "",
     name: "",
+    birthday: "",
     university: "",
-    faculty: "",
+    faculty_id: "",
     department: "",
     about: "",
   });
@@ -16,10 +18,33 @@ const StudentReg = () => {
     setData({ ...data, photoPreview: URL.createObjectURL(e.target.files[0]) });
   }
 
-  //@ts-ignore
-  function regStudent() {
-    console.log(data);
+  async function regStudent() {
+    let response = await fetch("/api/students/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      response = await response.json();
+    }
+
+    console.log(response)
+
   }
+
+  useLayoutEffect(() => {
+    async function request() {
+      const response = await fetch("/api/universities/university/");
+      const data = await response.json();
+      setUniversities(data);
+    }
+
+    request();
+  }, [])
 
   return (
     <main className="student-reg reg">
@@ -27,41 +52,56 @@ const StudentReg = () => {
         <div className="avatar">
           <img src={data.photoPreview} alt="" />
           <input
-            value={''}
+            value={""}
             onChange={(e) => changeFile(e)}
             style={{ display: "none" }}
             ref={ref}
             type="file"
           />
-          {/*@ts-ignore*/}
+  {/* @ts-ignore */}
+
           <button onClick={() => ref.current.click()}>Добавить фото</button>
         </div>
 
         <div className="info">
+          <label htmlFor="name">
+            <p>Имя и фамилия</p>
+          </label>
+
+          
           <input
+            id="name"
             value={data.name}
             onChange={(e) => setData({ ...data, name: e.target.value })}
             type="text"
-            placeholder="Имя"
           />
-          <input
-            value={data.university}
-            onChange={(e) => setData({ ...data, university: e.target.value })}
-            type="text"
-            placeholder="Университет"
-          />
-          <input
-            value={data.faculty}
-            onChange={(e) => setData({ ...data, faculty: e.target.value })}
-            type="text"
-            placeholder="Факультет"
-          />
-          <input
-            value={data.department}
-            onChange={(e) => setData({ ...data, department: e.target.value })}
-            type="text"
-            placeholder="Кафедра"
-          />
+          <label htmlFor="university">
+            <p>Университет</p>
+          </label>
+          <select name="university" id="">
+            {universities.map((item) => {
+              return (
+                // @ts-ignore
+                <option value={item.name} key={item.id}>
+                  {/* @ts-ignore */}
+                  {item.name}
+                </option>
+              );
+            })}
+          </select>
+          <label htmlFor="faculty">
+            <p>Факультет</p>
+          </label>
+          <select name="faculty" id="">
+            <option value="ИМИТ">ИМИТ</option>
+          </select>
+
+          <label htmlFor="department">
+            <p>Кафедра</p>
+          </label>
+          <select name="department" id="">
+            <option value="ПОВТАЗ">ПОВТАЗ</option>
+          </select>
         </div>
       </div>
       <textarea
@@ -70,7 +110,7 @@ const StudentReg = () => {
         placeholder="О себе"
       />
       <br />
-      <button>Зарегистрироваться</button>
+      <button onClick={regStudent}>Зарегистрироваться</button>
     </main>
   );
 };

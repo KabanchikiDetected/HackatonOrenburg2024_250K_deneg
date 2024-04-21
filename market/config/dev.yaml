@@ -1,0 +1,17 @@
+env_type: "dev"
+  
+jwt:
+  public_key_path: "./keys/public_key.pem"
+
+storage:
+  url: "mongodb://87.242.126.184:27017"
+  username: "root"
+  password: "passwordXD_1234"
+  db_name: "market_local"
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+
+events_client:
+  url: "http://events:8002/"

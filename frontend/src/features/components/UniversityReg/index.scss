@@ -1,0 +1,113 @@
+main.student-reg {
+  justify-content: normal;
+  background-color: #fff;
+  height: max-content;
+
+  label {
+    text-align: left;
+  }
+
+  textarea {
+    width: 100%;
+    height: 20vh;
+    border-radius: .5rem;
+    padding: .5rem;
+    resize: vertical;
+    outline: none;
+
+    &:focus {
+      border: 1px solid #5288C1;
+    }
+
+    &::placeholder {
+      font-family: "Montserrat", sans-serif;
+    }
+  }
+
+  button {
+    min-width: 200px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    background-color: #5288C1;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+
+  .submit {
+    align-self: center;
+  }
+
+  .reg__row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+
+
+    .avatar {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      
+      img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 1px solid #000;
+      }
+
+      button {
+        width: 100%;
+        border: none;
+        outline: none;
+        background-color: #5288C1;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+      }
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: .1rem;
+
+      select {
+        border: 1px solid #000;
+        outline: none;
+        background-color: #fff;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+
+
+        &:last-child {
+          margin-bottom: .5rem;
+        }
+      }
+
+      input {
+        border: 1px solid #000;
+        outline: none;
+        background-color: #fff;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+
+        &:focus {
+          border: 1px solid #5288C1;
+        }
+
+        &::placeholder {
+          color: #000;
+        }
+      }
+    }
+  }
+}

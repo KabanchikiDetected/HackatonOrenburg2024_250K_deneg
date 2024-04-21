@@ -1,21 +1,29 @@
 import { lazy, useLayoutEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+  // @ts-ignore
+
+import Student from "pages/Student";
+  // @ts-ignore
 
 const UniversityProfile = lazy(
   () => import("features/components/UniversityProfile")
 );
-const UniversityReg = lazy(() => import("features/components/UniversityReg"));
-const StudentProfile = lazy(() => import("features/components/StudentProfile"));
-const StudentReg = lazy(() => import("features/components/StudentReg"));
+  // @ts-ignore
+  const UniversityReg = lazy(() => import("features/components/UniversityReg"));
+  // @ts-ignore
+  const StudentProfile = lazy(() => import("features/components/StudentProfile"));
+  // @ts-ignore
+  const StudentReg = lazy(() => import("features/components/StudentReg"));
 
 const Profile = () => {
+  // @ts-ignore
   const [render, setRender] = useState<string>("");
-  const [token, _] = useState<string>(localStorage.getItem("token") as string);
 
   useLayoutEffect(() => {
+    let token = localStorage.getItem("token");
+  // @ts-ignore
+  let role = jwtDecode(token).role;
     async function request() {
-      //@ts-ignore
-      let role = jwtDecode(token).role;
 
       if (role === "user") {
         let response = await fetch("/api/universities/my/education/", {
@@ -49,15 +57,16 @@ const Profile = () => {
     request();
   }, []);
 
-  if (render === "user-reg") {
-    return <StudentReg />;
-  } else if (render === "user-profile") {
-    return <StudentProfile />;
-  } else if (render === "uni-reg") {
-    return <UniversityReg />;
-  } else if (render === "uni-profile") {
-    return <UniversityProfile />;
-  }
+  // if (render === "user-reg") {
+  //   return <StudentReg />;
+  // } else if (render === "user-profile") {
+  //   return <StudentProfile />;
+  // } else if (render === "uni-reg") {
+  //   return <UniversityReg />;
+  // } else if (render === "uni-profile") {
+  //   return <UniversityProfile />;
+  // }
+  return <StudentProfile />
 };
 
 export default Profile;

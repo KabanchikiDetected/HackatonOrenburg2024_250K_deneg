@@ -7,10 +7,10 @@ interface IData {
 }
 
 const Header = () => {
-  //@ts-ignore
+  // @ts-ignore
   const [data, setData] = useState<IData>({ city: "Orenburg" });
+  // @ts-ignore
 
-  //@ts-ignore
   function getRoutingText(): string {
     return "landing";
   }

@@ -49,7 +49,7 @@ const StudentLK = () => {
             <NavLink to={"/lk/vacancies"}>Вакансии</NavLink>
           </p>
           <p className="top__link link">
-            <NavLink to={"/lk/settings"}>Натсройки</NavLink>
+            <NavLink to={"/lk/settings"}>Настройки</NavLink>
           </p>
           <p className="top__link link">
             <NavLink to={"/lk/applications"}>Заявки</NavLink>

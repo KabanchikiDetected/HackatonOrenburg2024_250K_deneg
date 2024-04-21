@@ -1,6 +1,21 @@
 import "./index.scss";
+import { useEffect, useState } from "react";
+
+interface IUser {
+  id: string
+  name: string,
+  last_name: string,
+  education: string,
+  raiting: number,
+}
 
 const Rating = () => {
+  const [users, setUsers] = useState<IUser[]>([])
+
+  useEffect(() => {
+    
+  }, []);
+
   return (
     <main className="rating">
       <div className="rates">

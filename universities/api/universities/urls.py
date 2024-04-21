@@ -27,4 +27,5 @@ urlpatterns = [
     path("my/group/", controllers.MyGroupController.as_view()),
     path("my/request/", controllers.MyRequestController.as_view()),
     path("my/education/", controllers.MyEducationController.as_view()),
+    path("user/education/<str:user_id>/", controllers.UserEducationController.as_view()),
 ]

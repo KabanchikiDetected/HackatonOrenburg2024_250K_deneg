@@ -8,5 +8,6 @@ from .group import (
 )
 from .university import (
     UniversityController, UniversitiesController, UniversitySearchController,
-    DeputyUniversityController, UniversityAddImageController, MyEducationController
+    DeputyUniversityController, UniversityAddImageController, MyEducationController,
+    UserEducationController
 )

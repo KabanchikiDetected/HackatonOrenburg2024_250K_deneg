@@ -15,7 +15,6 @@
 }
 
 .top {
-  width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -49,7 +48,6 @@
   label {
     font-weight: 500;
     font-size: 1.2rem;
-
   }
 
   input,
@@ -77,13 +75,24 @@
     }
   }
 
-  button {
-    width: 100%;
-    border: none;
-    outline: none;
-    background-color: #5288C1;
-    color: #fff;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+  .faculty {
+    display: flex;
+    flex-direction: column;
+
+    .faculty_wrapper {
+      display: flex;
+      flex-direction: row;
+      .faculty {
+        font-size: 1.5rem;
+      }
+    }
+
+    .department_wrapper {
+      display: flex;
+      .department {
+        font-size: 1.2rem;
+        margin-left: 1rem;
+      }
+    }
   }
 }

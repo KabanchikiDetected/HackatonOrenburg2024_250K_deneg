@@ -47,9 +47,9 @@ const Profile = () => {
         let ok = response.ok;
 
         if (!ok) {
-          setRender("user-reg");
+          setRender("uni-reg");
         } else {
-          setRender("user-profile");
+          setRender("uni-profile");
         }
       }
     }
@@ -57,16 +57,16 @@ const Profile = () => {
     request();
   }, []);
 
-  // if (render === "user-reg") {
-  //   return <StudentReg />;
-  // } else if (render === "user-profile") {
-  //   return <StudentProfile />;
-  // } else if (render === "uni-reg") {
-  //   return <UniversityReg />;
-  // } else if (render === "uni-profile") {
-  //   return <UniversityProfile />;
-  // }
-  return <StudentProfile />
+  if (render === "user-reg") {
+    return <StudentReg />;
+  } else if (render === "user-profile") {
+    return <StudentProfile />;
+  } else if (render === "uni-reg") {
+    return <UniversityReg />;
+  } else if (render === "uni-profile") {
+    return <UniversityProfile />;
+  }
+  // return <UniversityProfile />
 };
 
 export default Profile;

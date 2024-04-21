@@ -32,11 +32,13 @@ main.student-reg {
   }
 
   .reg__row {
+    width: 480px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
     padding: 1rem;
+    transform: translateX(55px);
 
 
     .avatar {
@@ -46,7 +48,6 @@ main.student-reg {
       align-items: center;
       gap: 1rem;
       border-radius: 50%;
-      
       
       img {
         width: 150px;
@@ -86,7 +87,9 @@ main.student-reg {
         }
       }
 
+      select,
       input {
+        max-width: 70%;
         border: 1px solid #000;
         outline: none;
         background-color: #fff;

@@ -10,6 +10,7 @@
 }
 
 .row {
+  width: 100%;
   background-color: white;
   display: flex;
   flex-direction: column;
@@ -64,7 +65,8 @@
       align-items: center;
       gap: .3rem;
       font-size: 2rem;
-      font-weight: 300;
+      font-weight: 800;
+
 
       img {
         width: 30px;

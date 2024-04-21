@@ -1,5 +1,8 @@
 import { useRef, useState } from "react";
 import "./index.scss";
+import Modal from "../Modal";
+import cities from "features/utils/cities";
+import UniversityCreateStructure from "../Popups/UniversityCreateStructure";
 
 const StudentReg = () => {
   const [data, setData] = useState({
@@ -14,6 +17,8 @@ const StudentReg = () => {
     long_name: "",
   });
   const ref = useRef(null);
+  const [isOpenStructure, setIsOpenStructure] = useState(false);
+  const [faculties, setFaculties] = useState([{ faculty: "", id: 1, departments: [{ name: "", id: 1 }]}]);
 
   function changeFile(e: any) {
     setData({ ...data, photoPreview: URL.createObjectURL(e.target.files[0]) });
@@ -38,6 +43,9 @@ const StudentReg = () => {
 
   return (
     <main className="student-reg reg">
+      <Modal isOpen={isOpenStructure} setIsOpen={setIsOpenStructure}>
+        <UniversityCreateStructure setFaculties={setFaculties} faculties={faculties} setIsOpen={setIsOpenStructure} />
+      </Modal>
       <div className="reg__row">
         <div className="avatar">
           <img src={data.photoPreview} alt="" />
@@ -76,14 +84,27 @@ const StudentReg = () => {
           <label htmlFor="faculty">
             <p>Город</p>
           </label>
-          <input
-            id="city"
-            value={data.city}
-            onChange={(e) => setData({ ...data, city: e.target.value })}
-            type="text"
-          />
+          <select
+                value={data.city}
+                onChange={(event) => {
+                  setData({
+                    ...data,
+                    city: event.target.value,
+                  });
+                }}
+              >
+                {cities.map((item, id) => {
+                  return (
+                    <option key={item + id} value={item}>
+                      {item}
+                    </option>
+                  );
+                })}
+              </select>
 
-          <button className="add-struct">
+          <button className="add-struct"
+            onClick={() => setIsOpenStructure(true)}
+          >
             <p>Добавить структуру</p>
           </button>
         </div>

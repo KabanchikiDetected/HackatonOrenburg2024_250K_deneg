@@ -1,4 +1,3 @@
-import Rating from "features/components/Rating";
 import "./index.scss";
 import { Link } from "react-router-dom";
 import Footer from "features/components/Footer";
@@ -22,18 +21,18 @@ const Landing = () => {
           </div>
           <div className="panel__nav">
             <div className="link">
-              <Link to="/universities">ВУЗам</Link>
+              <Link to="/login">ВУЗам</Link>
             </div>
             <div className="link">
-              <Link to="/students">Студентам</Link>
+              <Link to="/login">Студентам</Link>
             </div>
             <div className="link">
-              <Link to="/enterprises">Предприятиям</Link>
+              <Link to="/login">Предприятиям</Link>
             </div>
           </div>
         </div>
       </div>
-      <Rating />
+      {/* <Rating /> */}
       <Footer />
     </main>
   );

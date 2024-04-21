@@ -1,17 +1,22 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./index.scss";
+import { useNavigate } from "react-router-dom";
 
 const StudentReg = () => {
   const [universities, setUniversities] = useState([]);
+  const [faculties, setFaculties] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const navigate = useNavigate()
   const [data, setData] = useState({
     photoPreview: "",
     name: "",
     birthday: "",
-    university: "",
-    faculty_id: "",
-    department: "",
+    university: "1",
+    faculty_id: "1",
+    department: "1",
     about: "",
   });
+
   const ref = useRef(null);
 
   function changeFile(e: any) {
@@ -19,32 +24,98 @@ const StudentReg = () => {
   }
 
   async function regStudent() {
-    let response = await fetch("/api/students/users", {
+    let response = await fetch(
+      `/api/universities/university/${data.university}/department/${data.faculty_id}/group/${data.department}/requests/`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        }
+      }
+    )
+    response = await fetch("/api/students/students/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify(data),
-    })
+      body: JSON.stringify({
+        birthday: `2000.01.01`,
+        description: data.about,
+        faculty_id: String(data.faculty_id),
+        first_name: data.name.split(" ")[0],
+        last_name: data.name.split(" ")[1],
+      }),
+    });
 
     if (response.ok) {
       response = await response.json();
+      localStorage.setItem("user", JSON.stringify(response));
+      navigate('/lk/feed')
     }
-
-    console.log(response)
-
   }
 
   useLayoutEffect(() => {
     async function request() {
-      const response = await fetch("/api/universities/university/");
-      const data = await response.json();
-      setUniversities(data);
+      let response = await fetch("/api/universities/university/");
+      response = await response.json();
+      //@ts-ignore
+      setUniversities(response);
+      setData({
+        ...data,
+        //@ts-ignore
+        university: response[0].id,
+      });
     }
 
     request();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    async function request() {
+      if (data.university) {
+        let response = await fetch(
+          `/api/universities/university/${data.university}/department/`
+        );
+        response = await response.json();
+        //@ts-ignore
+        setFaculties(response);
+
+        setData({
+          ...data,
+          //@ts-ignore
+          faculty_id: response[0].id,
+        });
+      }
+    }
+
+    request();
+  }, [data.university]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  useEffect(() => {
+    async function request() {
+      if (data.university) {
+        let response = await fetch(
+          `/api/universities/university/${data.university}/department/${data.faculty_id}/group/`
+        );
+        response = await response.json();
+        //@ts-ignore
+        setDepartments(response);
+
+        setData({
+          ...data,
+          //@ts-ignore
+          department: response[0].id,
+        });
+      }
+    }
+
+    request();
+  }, [data.faculty_id]);
 
   return (
     <main className="student-reg reg">
@@ -58,7 +129,7 @@ const StudentReg = () => {
             ref={ref}
             type="file"
           />
-  {/* @ts-ignore */}
+          {/* @ts-ignore */}
 
           <button onClick={() => ref.current.click()}>Добавить фото</button>
         </div>
@@ -68,7 +139,6 @@ const StudentReg = () => {
             <p>Имя и фамилия</p>
           </label>
 
-          
           <input
             id="name"
             value={data.name}
@@ -78,11 +148,29 @@ const StudentReg = () => {
           <label htmlFor="university">
             <p>Университет</p>
           </label>
-          <select name="university" id="">
+          <select
+            name="university"
+            id=""
+            value={//@ts-ignore
+              universities[data.university]}
+            onChange={(e) => {
+              const selectedUniversityId =
+                e.target.selectedOptions[0].getAttribute("name");
+              setData(//@ts-ignore
+              { ...data, university: selectedUniversityId });
+            }}
+          >
             {universities.map((item) => {
               return (
                 // @ts-ignore
-                <option value={item.name} key={item.id}>
+                <option
+                // @ts-ignore
+                  value={item.name}
+                  // @ts-ignore
+                  name={item.id}
+                  // @ts-ignore
+                  key={item.name + item.id}
+                >
                   {/* @ts-ignore */}
                   {item.name}
                 </option>
@@ -92,15 +180,57 @@ const StudentReg = () => {
           <label htmlFor="faculty">
             <p>Факультет</p>
           </label>
-          <select name="faculty" id="">
-            <option value="ИМИТ">ИМИТ</option>
+          {/* @ts-ignore */}
+          <select name="faculty" value={faculties[data.faculty_id]} id="">
+            {faculties.map((item) => {
+              return (
+                <option
+                // @ts-ignore
+                  value={item.name}
+                  onChange={(e) => {
+                    const selectedUniversityId =
+                    // @ts-ignore
+                      e.target.selectedOptions[0].getAttribute("name");
+                    setData({ ...data, faculty_id: selectedUniversityId });
+                  }}
+                  // @ts-ignore
+                  name={item.id}
+                  // @ts-ignore
+                  key={item.name + item.id}
+                >
+                  {/* @ts-ignore */}
+                  {item.name}
+                </option>
+              );
+            })}
           </select>
 
           <label htmlFor="department">
             <p>Кафедра</p>
           </label>
-          <select name="department" id="">
-            <option value="ПОВТАЗ">ПОВТАЗ</option>
+          {/* @ts-ignore */}
+          <select name="department" id="" value={departments[data.department]}>
+            {departments.map((item) => {
+              return (
+                <option
+                  onChange={(e) => {
+                    const selectedUniversityId =
+                    // @ts-ignore
+                      e.target.selectedOptions[0].getAttribute("name");
+                    setData({ ...data, department: selectedUniversityId });
+                  }}
+                  // @ts-ignore
+                  value={item.name}
+                  // @ts-ignore
+                  name={item.id}
+                  // @ts-ignore
+                  key={item.name + item.id}
+                >
+                  {/* @ts-ignore */}
+                  {item.name}
+                </option>
+              );
+            })}
           </select>
         </div>
       </div>

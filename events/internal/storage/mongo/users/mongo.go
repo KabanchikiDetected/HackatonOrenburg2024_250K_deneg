@@ -56,6 +56,17 @@ func (s *Storage) AddEventToUser(ctx context.Context, studentID string, eventID 
 		return err
 	}
 
+	// check if event already exists in EventToStudent
+	var eventsToStudent domain.EventsToStudent
+	if err = s.usersCollection.FindOne(ctx, bson.M{"user_id": objectID}).Decode(&eventsToStudent); err != nil {
+		return err
+	}
+	for _, ev := range eventsToStudent.Events {
+		if ev.ID == event.ID {
+			return errors.BadRequest
+		}
+	}
+
 	_, err = s.usersCollection.UpdateOne(
 		ctx,
 		bson.M{"user_id": objectID},

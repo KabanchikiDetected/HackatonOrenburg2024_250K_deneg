@@ -37,7 +37,13 @@ func (s *Service) AddEventToUser(ctx context.Context, id string, eventID string)
 	err := s.storage.AddEventToUser(ctx, id, eventID)
 	if err != nil {
 		s.log.Error("Error adding event to user", err)
-		return fmt.Errorf("%w: %s", customErrors.NotFound, "error adding event to user")
+		if errors.Is(err, customErrors.NotFound) {
+			return fmt.Errorf("%w: %s", customErrors.NotFound, "error adding event to user")
+		}
+		if errors.Is(err, customErrors.BadRequest) {
+			return fmt.Errorf("%w: %s", customErrors.BadRequest, "error adding event to user")
+		}
+		return fmt.Errorf("%w: %s", customErrors.InternalServerError, "error adding event to user")
 	}
 	log.Info("Added event to user")
 	return nil

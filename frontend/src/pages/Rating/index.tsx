@@ -2,18 +2,39 @@ import "./index.scss";
 import { useEffect, useState } from "react";
 
 interface IUser {
-  id: string
+  id: string,
   name: string,
   last_name: string,
   education: string,
   raiting: number,
 }
 
+interface IRaiting {
+  id: string,
+  user_id: string,
+  raiting: number,
+}
+
 const Rating = () => {
+  //@ts-ignore
   const [users, setUsers] = useState<IUser[]>([])
 
   useEffect(() => {
-    
+    fetch("http://127.0.0.1:8006/api/raiting/")
+    .then(response => response.json())
+    .then((data: IRaiting[]) => {
+      data.map(raiting => {
+        fetch(`/api/students/${raiting.user_id}`)
+          .then(response => response.json())
+          .then(userData => ({
+            ...userData,
+            raiting: raiting.raiting
+          }))
+      })
+    })
+    .then(data => {
+      console.log(data);
+    })
   }, []);
 
   return (

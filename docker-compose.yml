@@ -161,6 +161,8 @@ services:
       - 27017:27017
     networks:
       - backbone
+    volumes:
+      - mongo_data:/data/db
   
   postgres:
     container_name: postgres
@@ -176,6 +178,8 @@ services:
       - 5432:5432
     networks:
       - backbone
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   redis:
     image: redis:latest
@@ -193,3 +197,10 @@ services:
 networks:
   backbone:
     driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  mongo_data:
+    driver: local
+  

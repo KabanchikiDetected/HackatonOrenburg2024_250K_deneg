@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"sort"
 
 	"github.com/KabanchikiDetected/hackaton/events/internal/domain"
 	"github.com/KabanchikiDetected/hackaton/events/internal/errors"
@@ -56,17 +57,6 @@ func (s *Storage) AddEventToUser(ctx context.Context, studentID string, eventID 
 		return err
 	}
 
-	// check if event already exists in EventToStudent
-	var eventsToStudent domain.EventsToStudent
-	if err = s.usersCollection.FindOne(ctx, bson.M{"user_id": objectID}).Decode(&eventsToStudent); err != nil {
-		return err
-	}
-	for _, ev := range eventsToStudent.Events {
-		if ev.ID == event.ID {
-			return errors.BadRequest
-		}
-	}
-
 	_, err = s.usersCollection.UpdateOne(
 		ctx,
 		bson.M{"user_id": objectID},
@@ -115,4 +105,27 @@ func (s *Storage) DicrementRating(ctx context.Context, id string, rating int) er
 		},
 	)
 	return err
+}
+
+func (s *Storage) GetAllUserRatings(ctx context.Context) ([]domain.UserRating, error) {
+	cursor, err := s.usersCollection.Find(ctx, bson.M{})
+	if err != nil {
+		return nil, err
+	}
+	var eventsToStudents []domain.EventsToStudent
+	if err = cursor.All(ctx, &eventsToStudents); err != nil {
+		return nil, err
+	}
+	var userRatings []domain.UserRating
+	for _, eventsToStudent := range eventsToStudents {
+		userRatings = append(userRatings, domain.UserRating{
+			UserID: eventsToStudent.UserID,
+			Rating: eventsToStudent.Rating,
+		})
+	}
+	// sort this slice by rating
+	sort.Slice(userRatings, func(i, j int) bool {
+		return userRatings[i].Rating > userRatings[j].Rating
+	})
+	return userRatings, nil
 }

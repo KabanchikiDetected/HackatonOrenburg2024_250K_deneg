@@ -15,6 +15,7 @@ type UsersService interface {
 	AddEventToUser(ctx context.Context, id string, eventID string) error
 	UserEvents(ctx context.Context, id string) (domain.EventsToStudent, error)
 	DicrementRating(ctx context.Context, id string, rating int) error
+	GetAllUserRatings(ctx context.Context) ([]domain.UserRating, error)
 }
 
 type UserRouter struct {
@@ -124,10 +125,24 @@ func (h *UserRouter) dicrementRating(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+func (h *UserRouter) getAllUserRatings(w http.ResponseWriter, r *http.Request) {
+	ratings, err := h.service.GetAllUserRatings(r.Context())
+	if err != nil {
+		utils.HandleError(err, w)
+		return
+	}
+	err = utils.Encode(w, r, ratings)
+	if err != nil {
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
 func (r *UserRouter) init() {
 	key := utils.GetKey()
 	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("GET /my/events", r.userEvents)
 	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("POST /my/rating", r.dicrementRating)
 	r.mux.HandleFunc("GET /{id}/events", r.userEventsByID)
+	r.mux.HandleFunc("GET /rating", r.getAllUserRatings)
 	r.mux.With(auth.MiddlwareJWT(key)).HandleFunc("POST /my/events/{event_id}", r.addEventToUser)
 }

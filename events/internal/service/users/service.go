@@ -14,6 +14,7 @@ type Storage interface {
 	AddEventToUser(ctx context.Context, id string, eventID string) error
 	UserEvents(ctx context.Context, id string) (domain.EventsToStudent, error)
 	DicrementRating(ctx context.Context, id string, rating int) error
+	GetAllUserRatings(ctx context.Context) ([]domain.UserRating, error)
 }
 
 type Service struct {
@@ -80,4 +81,18 @@ func (s *Service) DicrementRating(ctx context.Context, id string, rating int) er
 	}
 	log.Info("Dicrementing rating")
 	return nil
+}
+
+func (s *Service) GetAllUserRatings(ctx context.Context) ([]domain.UserRating, error) {
+	const op = "service.GetAllUserRatings"
+
+	log := s.log.With("operation", op)
+	log.Info("Getting all user ratings")
+	userRatings, err := s.storage.GetAllUserRatings(ctx)
+	if err != nil {
+		s.log.Error("Error getting all user ratings", err)
+		return nil, fmt.Errorf("%w: %s", customErrors.NotFound, "error getting all user ratings")
+	}
+	log.Info("Got all user ratings")
+	return userRatings, nil
 }

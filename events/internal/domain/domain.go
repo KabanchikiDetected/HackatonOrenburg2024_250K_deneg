@@ -19,3 +19,8 @@ type EventsToStudent struct {
 	UserID string  `json:"user_id" bson:"user_id"`
 	Rating int     `json:"rating" bson:"rating"`
 }
+
+type UserRating struct {
+	UserID string `json:"user_id" bson:"user_id"`
+	Rating int    `json:"rating" bson:"rating"`
+}

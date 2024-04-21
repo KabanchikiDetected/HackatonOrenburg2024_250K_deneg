@@ -52,7 +52,7 @@ const Feed = () => {
             <div className="about">
               <div className="about__col col">
                 <div className="name">
-                  Иван Иванов <img src="/images/star.svg" alt="" /> 43
+                  Иван Иванов <img src="/images/star.svg" alt="" /> <span>43</span>
                 </div>
                 <div className="date">9 апр в 21:31</div>
               </div>
@@ -70,12 +70,8 @@ const Feed = () => {
             </strong>
             <div className="text">
               Всем привет
-              <br />
-              <br />
               Хочу поделиться радостью: Мы снова победили на
               хакатоне и заняли 2 место!!
-              <br />
-              <br />
               Нас от первого места отделил 1 бал,
               от чего грустно. поэтому мы обязательно вернемся туда за 1 местом,
               для нас это гештальт, который надо закрыть

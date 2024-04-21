@@ -4,7 +4,7 @@ main.profile {
   overflow: auto;
 
   .about {
-    width: 100%;
+    width: 106%;
     background-color: #fff;
     border-radius: 1rem;
     padding: 1rem;
@@ -84,7 +84,7 @@ main.profile {
   }
 
   button.new-post {
-    width: 105%;
+    width: 106%;
     display: flex;
     background-color: #fff;
     padding: 1rem;
@@ -111,7 +111,12 @@ main.profile {
       height: 100%;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       gap: .5rem;
+
+      p {
+        font-size: 1rem;
+      }
 
       input:disabled {
         width: 100%;
@@ -242,6 +247,18 @@ main.profile {
       }
     }
 
+    .wrapper {
+      display: flex;
+      gap: .5rem;
+
+      button {
+        background-color: #fff;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+
     .blue {
       color: #5288C1;
       font-weight: 300;
@@ -250,6 +267,18 @@ main.profile {
     .blue-bold {
       color: #5288C1;
       font-weight: 500;
+    }
+
+    .row-space {
+      .button  {
+        background-color: #5288C1;
+        color: #fff;
+        border: none;
+        padding: .5rem 1rem;
+        border-radius: .5rem;
+        cursor: pointer;
+      }
+
     }
 
     .post__col {

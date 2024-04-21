@@ -29,9 +29,11 @@ const Login = () => {
         }),
       });
       response = await response.json();
+      // @ts-ignore
       if (response.token) {
+        // @ts-ignore
         localStorage.setItem("token", response.token);
-        navigate('/lk/profile')
+        navigate("/lk/profile");
       } else {
         alert("Неверные данные");
       }
@@ -47,7 +49,10 @@ const Login = () => {
         },
         body: JSON.stringify(data),
       });
-      console.log(response);
+
+      if (response.ok) {
+        setRegister(false);
+      }
     }
   }
 
@@ -125,6 +130,8 @@ const Login = () => {
           className="login__switch"
           onClick={() => {
             setRegister(!register);
+
+            // @ts-ignore
             setData({ email: "", password: "", repeatPassword: "" });
           }}
         >

@@ -1,12 +1,14 @@
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import "./index.scss";
 
 const StudentReg = () => {
+  const [universities, setUniversities] = useState([]);
   const [data, setData] = useState({
     photoPreview: "",
     name: "",
+    birthday: "",
     university: "",
-    faculty: "",
+    faculty_id: "",
     department: "",
     about: "",
   });
@@ -16,9 +18,33 @@ const StudentReg = () => {
     setData({ ...data, photoPreview: URL.createObjectURL(e.target.files[0]) });
   }
 
-  function regStudent() {
-    console.log(data);
+  async function regStudent() {
+    let response = await fetch("/api/students/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    if (response.ok) {
+      response = await response.json();
+    }
+
+    console.log(response)
+
   }
+
+  useLayoutEffect(() => {
+    async function request() {
+      const response = await fetch("/api/universities/university/");
+      const data = await response.json();
+      setUniversities(data);
+    }
+
+    request();
+  }, [])
 
   return (
     <main className="student-reg reg">
@@ -32,6 +58,8 @@ const StudentReg = () => {
             ref={ref}
             type="file"
           />
+  {/* @ts-ignore */}
+
           <button onClick={() => ref.current.click()}>Добавить фото</button>
         </div>
 
@@ -39,6 +67,8 @@ const StudentReg = () => {
           <label htmlFor="name">
             <p>Имя и фамилия</p>
           </label>
+
+          
           <input
             id="name"
             value={data.name}
@@ -48,34 +78,34 @@ const StudentReg = () => {
           <label htmlFor="university">
             <p>Университет</p>
           </label>
-          <input
-            id="university"
-            value={data.university}
-            onChange={(e) => setData({ ...data, university: e.target.value })}
-            type="text"
-          />
+          <select name="university" id="">
+            {universities.map((item) => {
+              return (
+                // @ts-ignore
+                <option value={item.name} key={item.id}>
+                  {/* @ts-ignore */}
+                  {item.name}
+                </option>
+              );
+            })}
+          </select>
           <label htmlFor="faculty">
             <p>Факультет</p>
           </label>
-          <input
-            id="faculty"
-            value={data.faculty}
-            onChange={(e) => setData({ ...data, faculty: e.target.value })}
-            type="text"
-          />
+          <select name="faculty" id="">
+            <option value="ИМИТ">ИМИТ</option>
+          </select>
+
           <label htmlFor="department">
             <p>Кафедра</p>
           </label>
-          <input
-            id="department"
-            value={data.department}
-            onChange={(e) => setData({ ...data, department: e.target.value })}
-            type="text"
-          />
+          <select name="department" id="">
+            <option value="ПОВТАЗ">ПОВТАЗ</option>
+          </select>
         </div>
       </div>
       <textarea
-        value={data.about}d
+        value={data.about}
         onChange={(e) => setData({ ...data, about: e.target.value })}
         placeholder="О себе"
       />

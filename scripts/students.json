@@ -1,0 +1,62 @@
+[
+    {
+        "first_name": "Пинская",
+        "last_name": "Галина",
+        "birthday": "2000.01.01",
+        "description": "Описание Пинская Галина"
+    },
+    {
+        "first_name": "Боряева",
+        "last_name": "Влада",
+        "birthday": "2000.01.01",
+        "description": "Описание Боряева Влада"
+    },
+    {
+        "first_name": "Аргамакова",
+        "last_name": "Надежда",
+        "birthday": "2000.01.01",
+        "description": "Описание Аргамакова Надежда"
+    },
+    {
+        "first_name": "Дарья",
+        "last_name": "Александрова",
+        "birthday": "2000.01.01",
+        "description": "Описание Дарья Александрова"
+    },
+    {
+        "first_name": "София",
+        "last_name": "Волкова",
+        "birthday": "2000.01.01",
+        "description": "Описание София Волкова"
+    },
+    {
+        "first_name": "Арина",
+        "last_name": "Семёнова",
+        "birthday": "2000.01.01",
+        "description": "Описание Арина Семёнова"
+    },
+    {
+        "first_name": "Никита",
+        "last_name": "Васильев",
+        "birthday": "2000.01.01",
+        "description": "Описание Никита Васильев"
+    },
+    {
+        "first_name": "Дмитрий",
+        "last_name": "Кузнецов",
+        "birthday": "2000.01.01",
+        "description": "Описание Дмитрий Кузнецов"
+    },
+    {
+        "first_name": "Максим",
+        "last_name": "Фёдоров",
+        "birthday": "2000.01.01",
+        "description": "Описание Максим Фёдоров"
+    },
+    {
+        "first_name": "Сергей",
+        "last_name": "Иванов",
+        "birthday": "2000.01.01",
+        "description": "Описание Сергей Иванов"
+    }
+]

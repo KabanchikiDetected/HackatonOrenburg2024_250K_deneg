@@ -1,0 +1,62 @@
+[
+    {
+        "email": "user1@example.com",
+        "password": "user1",
+        "repeat_password": "user1"
+    },
+    {
+        "email": "user2@example.com",
+        "password": "user2",
+        "repeat_password": "user2"
+    },
+    {
+        "email": "user3@example.com",
+        "password": "user3",
+        "repeat_password": "user3"
+    },
+    {
+        "email": "user4@example.com",
+        "password": "user4",
+        "repeat_password": "user4"
+    },
+    {
+        "email": "user5@example.com",
+        "password": "user5",
+        "repeat_password": "user5"
+    },
+    {
+        "email": "user6@example.com",
+        "password": "user6",
+        "repeat_password": "user6"
+    },
+    {
+        "email": "user7@example.com",
+        "password": "user7",
+        "repeat_password": "user7"
+    },
+    {
+        "email": "user8@example.com",
+        "password": "user8",
+        "repeat_password": "user8"
+    },
+    {
+        "email": "user9@example.com",
+        "password": "user9",
+        "repeat_password": "user9"
+    },
+    {
+        "email": "user10@example.com",
+        "password": "user10",
+        "repeat_password": "user10"
+    },
+    {
+        "email": "user11@example.com",
+        "password": "user11",
+        "repeat_password": "user11"
+    },
+    {
+        "email": "user12@example.com",
+        "password": "user12",
+        "repeat_password": "user12"
+    }
+]
